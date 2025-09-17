@@ -1,0 +1,107 @@
+.container {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: clamp(24px, 4vw, 40px) 16px;
+}
+.title {
+  font-weight: 800;
+  font-size: clamp(22px, 3vw, 28px);
+  text-align: center;
+  margin-bottom: 28px;
+  color: var(--color-gray-900, #111827);
+}
+.block { margin-top: 24px; }
+.step {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 800; color: var(--color-gray-900);
+  margin-bottom: 12px;
+}
+.step span {
+  color: var(--color-primary-600, #FF6B00);
+}
+
+.planCard {
+  border: 2px solid #f3f4f6;
+  border-radius: 12px;
+  padding: 16px;
+  background: #fff;
+}
+.planCard[data-selected] { border-color: #fde1c7; background: #fffaf5; }
+.planHeader {
+  display: flex; align-items: baseline; justify-content: space-between;
+}
+.planName { font-weight: 700; }
+.planPrice { font-weight: 800; font-size: 22px; }
+.per { font-size: 12px; color: #6b7280; margin-left: 4px; }
+.planNote { margin-top: 8px; color: #6b7280; }
+
+.couponRow { display: flex; gap: 8px; }
+.input {
+  flex: 1; border: 1px solid #e5e7eb; border-radius: 10px;
+  padding: 10px 12px; font-size: 14px;
+}
+.couponApplied { color: #16a34a; margin-top: 8px; font-weight: 600; }
+.error { color: #ef4444; margin-top: 8px; }
+
+.summaryCard {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  background: #fff;
+}
+.row { display: flex; justify-content: space-between; padding: 6px 0; }
+.smallNote { color: #6b7280; font-size: 12px; margin-top: 6px; }
+
+.cta { margin-top: 16px; display: flex; justify-content: center; }
+
+/* 追加：スケジュール表示 */
+.schedule {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.scheduleRow {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px dashed #e5e7eb;
+}
+.scheduleRow:last-child { border-bottom: none; }
+.scheduleLabel { color: #374151; font-weight: 600; }
+.scheduleDate { color: #6b7280; font-size: 13px; }
+.scheduleAmount { font-weight: 800; }
+
+/* 既存にあると思いますが無ければ */
+.label { display: block; font-weight: 600; margin-bottom: 8px; color: #111827; }
+.couponRow { display: flex; gap: 8px; }
+.input { flex: 1; border: 1px solid #e5e7eb; border-radius: 10px; padding: 10px 12px; font-size: 14px; }
+.couponApplied { color: #16a34a; margin-top: 8px; font-weight: 600; }
+
+/* 初月無料の強調 */
+.trialBanner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff7ed;             /* 薄いオレンジ */
+  border: 1px solid #fed7aa;
+  border-radius: 9999px;
+  padding: 6px 10px;
+  margin-bottom: 10px;
+}
+.trialBadge {
+  background: #ffedd5;
+  color: #d97706;                   /* amber-600 */
+  font-weight: 800;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+.trialText {
+  color: #c2410c;                   /* orange-700 */
+  font-weight: 700;
+  font-size: 14px;
+}

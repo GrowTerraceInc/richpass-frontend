@@ -1,0 +1,57 @@
+.button {
+  border: 1px solid transparent;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* Variant styles */
+.primary {
+  background-color: var(--color-primary-500);
+  color: var(--color-white);
+}
+.primary:hover:enabled {
+  background-color: var(--color-primary-600);
+}
+
+.secondary {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  color: var(--color-gray-900);
+}
+/* ← ここを薄いオレンジに変更（以前は var(--color-gray-100)） */
+.secondary:hover:enabled {
+  background-color: var(--color-primary-100);
+}
+
+/* Size styles */
+.small {
+  font-size: 14px;
+  padding: 8px 16px;
+}
+
+.medium {
+  font-size: 16px;
+  padding: 12px 24px;
+}
+
+.large {
+  font-size: 18px;
+  padding: 15px 40px;
+}
+
+/* Hover effect */
+.button:hover:enabled {
+  opacity: 0.95;
+}
+
+/* Disabled state */
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

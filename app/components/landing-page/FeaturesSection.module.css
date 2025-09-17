@@ -1,0 +1,79 @@
+/* 見出し */
+.heading {
+  text-align: center;
+  font-size: clamp(22px, 2.4vw, 32px);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin: 0 0 16px; /* ↓ lead と間隔をとるので 32→16 に調整 */
+  color: #111827;
+}
+
+/* 追加：見出し直下の説明文 */
+.lead {
+  max-width: 64ch;
+  margin: 0 auto 28px; /* 下に余白を確保してカードと分離 */
+  font-size: 15px;
+  line-height: 1.9;
+  color: #4b5563;
+  text-align: center;
+  text-wrap: pretty;
+}
+@media (min-width: 1024px) {
+  .lead { font-size: 16px; }
+}
+
+/* カードグリッド */
+.featuresContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+@media (min-width: 768px) {
+  .featuresContainer {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+}
+
+.featureCard {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(17, 24, 39, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.featureCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(17, 24, 39, 0.12);
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-bottom: 1px solid #f0f0f0;
+}
+.imageWrapper :global(img) { object-fit: cover; }
+
+.cardBody { padding: 16px 16px 20px; }
+
+.cardTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin: 8px 0 8px;
+  line-height: 1.4;
+}
+
+.cardText {
+  font-size: 14px;
+  color: #4b5563;
+  line-height: 1.8;
+  margin: 0;
+}
+
+@media (min-width: 1024px) {
+  .cardBody { padding: 18px 18px 22px; }
+}

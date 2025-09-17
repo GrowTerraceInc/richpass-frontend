@@ -1,0 +1,92 @@
+/* app/signup/components/RegistrationConfirm.module.css */
+
+.section {
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: clamp(48px, 8vw, 96px) 16px;
+  background: #fff;
+}
+
+.inner {
+  width: 100%;
+  max-width: 720px;
+  text-align: center;
+  animation: fadeIn 280ms ease both;
+}
+
+.title {
+  font-weight: 900;
+  font-size: clamp(24px, 3.2vw, 36px);
+  color: var(--color-gray-900, #333);
+  margin: 0 0 8px;
+}
+
+.desc {
+  color: #64748b;
+  margin: 0 0 20px;
+  line-height: 1.9;
+}
+
+/* 確認ボックス */
+.confirmBox {
+  background: #f9f9f9;
+  border-radius: 16px;
+  padding: clamp(16px, 3vw, 24px);
+  margin: 0 auto clamp(24px, 3vw, 32px);
+  text-align: left;
+  max-width: 520px;
+  border: 1px solid #eee;
+}
+
+.confirmItem {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 6px;
+  padding: 6px 4px;
+}
+
+.label {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.value {
+  font-size: clamp(18px, 2.4vw, 20px);
+  color: var(--color-gray-900, #333);
+  font-weight: 900; /* 値は少し大きく太字 */
+  word-break: break-all;
+}
+
+.sep {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 6px 0;
+}
+
+/* CTA */
+.cta {
+  margin: 8px 0 12px;
+  display: flex;
+  justify-content: center;
+}
+
+/* 修正リンク（シンプルなテキストリンク） */
+.backRow {
+  margin-top: 8px;
+}
+.backLink {
+  color: #475569;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 700;
+}
+.backLink:hover { color: #334155; }
+
+/* fade in */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,65 @@
+.conceptSection {
+  /* 背景・上下余白は globals の .section / .bg-* に委譲 */
+  display: flex;
+  justify-content: center;
+}
+
+/* 一貫した縦リズム用のスペーシング変数を定義 */
+.inner {
+  --vspace: 24px; /* 基本の上下間隔（SP） */
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .inner { --vspace: 28px; }
+}
+
+/* ── ロゴ ───────────────────────────── */
+.logo {
+  width: clamp(240px, 70vw, 420px);
+  height: auto;
+  margin-bottom: var(--vspace);
+}
+
+/* ── 見出し ─────────────────────────── */
+.heading {
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  margin: 0 0 var(--vspace);
+  font-size: clamp(1.7rem, 3.2vw, 2.1rem);
+  text-wrap: balance;
+  line-break: strict;
+}
+
+.emphasis {
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
+  text-decoration-color: #f39c12;
+}
+
+/* ── 説明文 ─────────────────────────── */
+.description {
+  font-size: 1rem;
+  line-height: 1.9;
+  color: #555;
+  margin: 0;
+  max-width: 52ch;
+  margin-inline: auto;
+  text-wrap: pretty;
+  line-break: strict;
+  word-break: keep-all;
+}
+
+@media (min-width: 1024px) {
+  .description { font-size: 18px; }
+}
+
+.kagi { font-weight: 600; }
+
+/* スマホ時だけ任意箇所に改行を入れる */
+.brSmOnly { display: none; }
+@media (max-width: 767px) {
+  .brSmOnly { display: inline; }
+}

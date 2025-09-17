@@ -1,0 +1,19 @@
+.finalCtaSection { text-align: center; } /* ← 空じゃないのでOK */
+
+.heading {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.ctaWrap {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 480px) {
+  .heading { font-size: 1.5rem; }
+}

@@ -1,0 +1,56 @@
+.wrap { text-align: center; }
+.h1 { font-size: clamp(22px, 2.8vw, 30px); font-weight: 900; margin: 0 0 16px; }
+.p  { color: #475569; }
+
+.card {
+  margin: 0 auto;
+  max-width: 720px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 12px 28px rgba(17,24,39,.08);
+  text-align: left;
+}
+
+.badge {
+  display: inline-block;
+  background: var(--color-primary-100, #fffaf0);
+  color: var(--color-primary-600, #e67e22);
+  border: 1px solid #f8e0b8;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.title { font-size: clamp(20px, 2.4vw, 26px); font-weight: 900; margin: 0 0 8px; }
+.desc  { color: #334155; line-height: 1.9; margin: 0 0 16px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 16px 0 12px;
+}
+@media (max-width: 520px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+
+.stat {
+  border: 1px solid #eef2f7;
+  border-radius: 12px;
+  padding: 10px;
+  background: #fafbff;
+}
+.statLabel { font-size: 12px; color: #64748b; }
+.statValue { font-size: 18px; font-weight: 900; color: #0f172a; }
+
+.actions { margin-top: 16px; text-align: center; }
+.primaryLink {
+  display: inline-block;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: var(--color-primary-500, #f39c12);
+  color: #fff;
+  font-weight: 800;
+  text-decoration: none;
+}

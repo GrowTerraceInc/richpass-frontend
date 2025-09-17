@@ -1,0 +1,3 @@
+planId,name,priceMonthly,priceYearly,featuresJson,stripePriceIdMonthly,stripePriceIdYearly
+free,FREE,0,0,"[""一部レッスン無料"",""テスト参加可(一部)""]",,
+pro,PRO,980,10000,"[""全レッスン視聴可"",""テスト無制限"",""学習履歴同期""]",price_monthly_xxx,price_yearly_xxx

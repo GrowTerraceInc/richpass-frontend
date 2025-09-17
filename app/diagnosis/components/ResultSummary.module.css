@@ -1,0 +1,151 @@
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-m);
+  text-align: center;
+}
+
+/* ヘッダー */
+.pageTitle {
+  font-size: var(--h2-size);
+  font-weight: 700;
+  margin: 0 0 var(--space-s);
+  color: var(--color-gray-900);
+}
+.pageLead {
+  color: var(--color-gray-500);
+  margin: 0 0 var(--space-m);
+  font-size: 14px;
+}
+
+/* 画像：SP 144px / PC 200px */
+.heroImg {
+  margin: var(--space-m) auto;
+  width: 144px;
+  height: 144px;
+}
+.heroImgInner { width: 100%; height: 100%; object-fit: contain; display: block; }
+@media (min-width: 1024px) {
+  .heroImg { width: 200px; height: 200px; }
+}
+
+/* タイプ名・タグ */
+.typeName {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-primary-600);
+  letter-spacing: 0.02em;
+  margin: 0 0 var(--space-s);
+}
+.keywords {
+  display: flex; justify-content: center; gap: var(--space-s);
+  margin: 0 0 var(--space-m); padding: 0; list-style: none;
+}
+.keywords li {
+  background: var(--color-primary-100);
+  color: var(--color-primary-600);
+  font-size: 13px; font-weight: 700;
+  padding: 4px 12px; border-radius: 12px;
+}
+
+/* 概要 */
+.description {
+  max-width: 680px; margin: 0 auto var(--space-l);
+  color: var(--color-gray-700); line-height: 1.9;
+}
+
+/* レーダー（枠線なし・背景透過・やや大きめ） */
+.graphBox {
+  max-width: 760px;
+  height: 320px;
+  margin: 0 auto var(--space-xl);
+  border: none;                 /* ← 枠線を消す */
+  border-radius: 12px;
+  background: transparent;      /* ← 背景も透過 */
+  padding: 8px;
+}
+@media (min-width: 1024px) {
+  .graphBox { height: 360px; }
+}
+
+/* 共有導線 */
+.share { margin-top: var(--space-m); }
+.shareLead { color: var(--color-gray-600); font-size: 13px; }
+.shareBtns { display: flex; justify-content: center; gap: var(--space-m); margin-top: var(--space-s); }
+.iconBtn { background: none; border: 1px solid var(--color-gray-200); border-radius: 12px; padding: 6px 12px; cursor: pointer; }
+
+/* ロックセクション全体 */
+.lockSection {
+  margin-top: var(--space-xxl);
+  background: #fff7ed; /* primary-50 相当 */
+  border: 1px dashed var(--color-primary-200, #fed7aa);
+  border-radius: 16px;
+  padding: var(--space-l);
+  text-align: left;
+}
+.lockHeading {
+  text-align: center;
+  font-size: var(--h3-size); font-weight: 700;
+  margin: 0 0 var(--space-m);
+  color: var(--color-gray-900);
+}
+
+/* ぼかしカード */
+.blurCard {
+  background: #fff;
+  border: 1px solid var(--color-gray-200, #e5e7eb);
+  border-radius: 16px;
+  padding: var(--space-m);
+  margin: 0 auto var(--space-m);
+  max-width: 920px;
+}
+.cardTitle {
+  font-weight: 700; color: var(--color-gray-900); margin: 0 0 var(--space-s);
+}
+
+/* ぼかし本体（角丸はみ出し防止のため overflow: hidden を追加） */
+.blurredWrap {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden; /* ← ブラーのはみ出し対策 */
+}
+.blurredContent {
+  color: var(--color-gray-700); line-height: 1.9;
+  filter: blur(5px); user-select: none; pointer-events: none;
+}
+/* 上に半透明の案内を被せる */
+.blurOverlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 8px;
+  background: linear-gradient(180deg, rgba(255,255,255,.7), rgba(255,255,255,.9));
+  color: var(--color-gray-700);
+  text-align: center;
+}
+.lockIcon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 9999px;
+  background: var(--color-primary-100); color: var(--color-primary-600);
+  font-size: 18px;
+}
+
+/* アップグレードCTA */
+.upgradeCallout {
+  margin-top: var(--space-m);
+  text-align: center;
+}
+.upgradeLead { color: var(--color-gray-700); margin-bottom: var(--space-s); }
+.primaryCta {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--color-primary-600); color: #fff; font-weight: 700;
+  padding: 12px 18px; border-radius: 9999px; text-decoration: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,.08);
+}
+.primaryCta:hover { opacity: .95; }
+.note { margin-top: var(--space-s); font-size: 12px; color: var(--color-gray-500); }
+
+/* SP調整 */
+@media (max-width: 480px) {
+  .container { padding: var(--space-l) var(--space-s); }
+  .blurCard { padding: var(--space-s); }
+}

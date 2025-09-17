@@ -1,0 +1,14 @@
+userId,id,date,description,amount,currency,receiptUrl
+u_demo_001,ch_20250101,2025-01-01T00:00:00Z,12月利用料金,980,JPY,https://example.com/r/20250101
+u_demo_001,ch_20250201,2025-02-01T00:00:00Z,1月利用料金,980,JPY,https://example.com/r/20250101
+u_demo_001,ch_20250301,2025-03-01T00:00:00Z,2月利用料金,980,JPY,https://example.com/r/20250301
+u_demo_001,ch_20250401,2025-04-01T00:00:00Z,3月利用料金,980,JPY,https://example.com/r/20250101
+u_demo_001,ch_20250501,2025-05-01T00:00:00Z,4月利用料金,980,JPY,https://example.com/r/20250101
+u_demo_001,ch_20250601,2025-06-01T00:00:00Z,5月利用料金,980,JPY,https://example.com/r/20250101
+u_demo_001,ch_20250701,2025-07-01T00:00:00Z,6月利用料金,980,JPY,https://example.com/r/20250101
+u_demo_001,ch_20250801,2025-08-01T00:00:00Z,7月利用料金,980,JPY,https://example.com/r/20250101
+u_demo_001,ch_20250901,2025-09-01T00:00:00Z,8月利用料金,980,JPY,https://example.com/r/20250101
+u_demo_001,ch_20251001,2025-10-01T00:00:00Z,9月利用料金,980,JPY,https://example.com/r/20250101
+u_demo_001,ch_20251101,2025-11-01T00:00:00Z,10月利用料金,980,JPY,
+u_demo_001,ch_20251201,2025-12-01T00:00:00Z,11月利用料金,980,JPY,
+u_demo_001,ch_20260101,2026-01-01T00:00:00Z,12月利用料金,980,JPY,

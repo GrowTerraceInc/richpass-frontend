@@ -1,0 +1,21 @@
+/* 外側。高さは親からもらえるようにしておく（例: .progress { height: 10px }） */
+.root {
+  width: 100%;
+  height: var(--progress-height, 10px);
+}
+
+/* トラック */
+.track {
+  height: 100%;
+  border-radius: 9999px;
+  overflow: hidden;
+  background: var(--progress-track, var(--color-gray-200, #e5e7eb));
+}
+
+/* 進捗フィル */
+.fill {
+  height: 100%;
+  width: 0%;
+  transition: width .2s ease;
+  background: var(--bar-color, var(--color-primary-600, #E67E22)); /* ← デフォはブランド色 */
+}

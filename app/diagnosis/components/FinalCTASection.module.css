@@ -1,0 +1,38 @@
+/* セクション背景：orange-500 */
+.wrap {
+  background: var(--color-primary-500);
+  padding-block: clamp(40px, 7vw, 72px);
+  text-align: center;
+}
+
+/* 見出しはH1・白文字 */
+.title {
+  color: #fff;
+  font-weight: 900;
+  font-size: clamp(20px, 3.2vw, 28px);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* 改行制御：SPのみ1行目の後で改行を入れる */
+.brSmOnly { display: inline; }
+@media (min-width: 768px) {
+  .brSmOnly { display: none; }
+}
+
+.btnArea { margin-top: 16px; }
+
+/* 既存Button(secondary=白背景)を上書きして文字色をorange-500に */
+.ctaButton {
+  color: var(--color-primary-500) !important;
+  border-color: transparent !important;
+  background: #fff !important;
+}
+
+/* 補助テキストは白 */
+.note {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #fff;
+  opacity: .95;
+}

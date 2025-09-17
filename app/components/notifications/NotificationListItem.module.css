@@ -1,0 +1,69 @@
+/* 下線は常に出さない（グローバル a:hover の上書き） */
+.linkWrap,
+.linkWrap:hover,
+.linkWrap:focus,
+.linkWrap:focus-visible,
+.linkWrap:active {
+  text-decoration: none !important;
+  color: inherit;
+  display: block;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 30px 1fr; /* ← アイコン枠を30pxに */
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--color-gray-100);
+  border-radius: 12px;
+  background: var(--color-white);
+  transition:
+    box-shadow .15s ease,
+    transform .02s ease,
+    border-color .15s ease,
+    background-color .15s ease;
+  margin: 0 0 12px;
+}
+
+.pinned {
+  border-color: var(--color-gray-200);
+}
+
+/* ホバーで“黄色背景＋少し浮く” */
+@media (hover: hover) {
+  .linkWrap:hover .item {
+    background: var(--color-primary-100);
+    box-shadow: 0 3px 10px rgba(0,0,0,.06);
+    transform: translateY(-1px);
+    border-color: var(--color-gray-200);
+  }
+}
+
+/* キーボードフォーカス */
+.linkWrap:focus-visible .item {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* アイコン（Lucide） */
+.icon {
+  display: flex;
+  align-items: center;   /* ← 縦中央揃え */
+  justify-content: center;
+  align-self: center;    /* ← 行の中でも中央に */
+  /* 余計な上詰め補正はしない */
+}
+
+.svg {
+  width: 30px;  /* ← 30px固定 */
+  height: 30px; /* ← 30px固定 */
+  stroke: var(--color-gray-600);
+}
+
+/* 種別で色を少しだけ差別化 */
+.icon[data-kind="alert"] .svg { stroke: var(--color-error); }
+.trophy { stroke: var(--color-primary-600); }
+
+.main { display: flex; flex-direction: column; gap: 6px; }
+.title { font-weight: 700; color: var(--color-gray-900); text-decoration: none !important; }
+.meta  { color: var(--color-gray-600); font-size: 14px; text-decoration: none !important; }

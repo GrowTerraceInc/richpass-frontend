@@ -1,0 +1,134 @@
+/* セクション全体の文字色を gray-900 に統一 */
+.section { color: var(--color-gray-900); }
+
+/* このセクションだけ横幅を約1000pxに制限 */
+.inner {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding-inline: 16px;
+}
+
+/* 見出し：中央寄せ、下余白32px */
+.heading {
+  text-align: center;
+  margin: 0 0 32px;
+  font-weight: 800;
+  font-size: clamp(22px, 2.6vw, 32px);
+}
+
+/* リスト */
+.list { display: grid; gap: 10px; }
+
+/* 質問ブロック */
+.qa {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-shadow: 0 10px 24px rgba(17,24,39,.06);
+}
+
+/* ── 質問行（summary）: 左にQピル, 中央テキスト, 右にヒント&矢印 ── */
+.q {
+  display: grid;
+  grid-template-columns: auto 1fr auto; /* [Q] [テキスト] [ヒント/矢印] */
+  align-items: start;
+  column-gap: 8px;
+  list-style: none;
+  margin: 0;
+  position: relative;
+  cursor: pointer;
+  padding-right: 28px; /* 右端の矢印スペース */
+  border-radius: 8px;
+}
+.q::-webkit-details-marker { display: none; }
+
+/* テキスト */
+.qText {
+  font-weight: 800;
+  font-size: 15px;
+}
+
+/* ヒント：閉じている時のみ表示。SP中心に見せる */
+.hint {
+  font-size: 12px;
+  color: #64748b; /* slate-500 */
+  align-self: center;
+}
+.qa[open] .hint { display: none; }
+@media (min-width: 768px) { .hint { display: none; } }
+
+/* ホバー/フォーカスで“押せる感” */
+.q:hover { background: #f8fafc; }
+.q:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* 回答 */
+.a {
+  margin: 8px 0 0;
+  font-size: 14px;          /* Body相当 */
+  line-height: 1.9;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 8px;
+  align-items: start;
+}
+
+/* ── Q/A ラベル（色分け・ピル表示・縦位置揃え） ── */
+:root { --qa-pill-h: 22px; }
+
+.q::before,
+.a::before {
+  display: inline-block;
+  min-width: calc(var(--qa-pill-h) + 4px);
+  height: var(--qa-pill-h);
+  line-height: var(--qa-pill-h);
+  padding: 0 8px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+  align-self: start;
+  margin-top: 1px; /* 光学補正 */
+}
+
+/* Q = ブランドオレンジ系 */
+.q::before {
+  content: "Q";
+  color: var(--color-primary-600);      /* #E67E22 */
+  background: var(--color-primary-100); /* #fffaf0 */
+  border-color: #f8e0b8;
+}
+
+/* A = 情報ブルー系 */
+.a::before {
+  content: "A";
+  color: var(--color-info);                   /* #1DA1F2 */
+  background: rgba(29,161,242,0.10);
+  border-color: rgba(29,161,242,0.25);
+}
+
+/* 右端の矢印（▼）。開閉で回転 */
+.q::after {
+  content: "";
+  width: 10px; height: 10px;
+  border-right: 2px solid #9ca3af;  /* slate-400 */
+  border-bottom: 2px solid #9ca3af;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-45deg); /* 閉: 右下矢印 */
+  transition: transform .18s ease;
+}
+.qa[open] .q::after {
+  transform: translateY(-50%) rotate(45deg);  /* 開: 右上矢印 */
+}
+
+/* 小画面での余白微調整 */
+@media (max-width: 480px) {
+  .qa { padding: 12px; }
+}

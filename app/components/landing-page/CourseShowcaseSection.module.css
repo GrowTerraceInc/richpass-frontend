@@ -1,0 +1,103 @@
+/* .showcaseSection は削除（空ルール回避） */
+.inner { text-align: center; }
+
+/* 見出し */
+.heading {
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  margin: 0 0 32px;
+  line-height: 1.35;
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  text-wrap: balance;
+}
+
+/* ===== 無限ループ横スクロール（3段） ===== */
+.scrollerWrap { position: relative; isolation: isolate; }
+
+.scroller {
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  touch-action: none;
+}
+
+.belt {
+  --gap: 14px;
+  --span-gap: 14px;
+  display: flex;
+  align-items: stretch;
+  padding: var(--gap);
+}
+
+.span { display: flex; align-items: stretch; }
+
+.cycle {
+  --card-w: 180px;
+  --card-h: 136px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: var(--card-w);
+  grid-template-rows: repeat(3, var(--card-h));
+  gap: var(--gap);
+}
+
+.cycleSpacer { flex: 0 0 var(--span-gap); }
+
+@media (max-width: 767px) {
+  .belt { --gap: 12px; --span-gap: 12px; }
+  .cycle {
+    --card-h: 124px;
+    --card-w: calc((100vw - 40px - (var(--gap) * 2)) / 3);
+  }
+}
+
+@media (min-width: 1280px) {
+  .cycle { --card-w: 200px; --card-h: 148px; }
+}
+
+.courseCard {
+  background: #f9f9f9;
+  border-radius: 16px;
+  height: var(--card-h);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #111;
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+  box-shadow: 0 0 0 rgba(0,0,0,0);
+}
+.courseCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0,0,0,.08);
+  background: #f6f6f6;
+}
+
+.moreCard { background: #f3f3f3; }
+.moreText {
+  font-weight: 700;
+  color: #777;
+  letter-spacing: 0.02em;
+  font-size: .95rem;
+}
+
+.iconWrap { width: 64px; height: 64px; display: grid; place-items: center; }
+.icon { width: 100%; height: auto; object-fit: contain; }
+.courseName {
+  margin-top: 10px;
+  font-size: .9rem;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.fadeLeft, .fadeRight {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 40px;
+  pointer-events: none;
+  z-index: 1;
+}
+.fadeLeft  { left: 0;  background: linear-gradient(to right, #fff, rgba(255,255,255,0)); }
+.fadeRight { right: 0; background: linear-gradient(to left,  #fff, rgba(255,255,255,0)); }

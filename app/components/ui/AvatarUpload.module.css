@@ -1,0 +1,26 @@
+.root {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px; /* 余白を少し広めに */
+}
+
+/* 画像は150px・円形 */
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 9999px;
+  object-fit: cover;
+  background: var(--color-gray-100);
+  border: 1px solid var(--color-gray-200);
+}
+
+/* 「画像を変更する」ボタンの余白だけ管理（見た目は Button コンポーネントに委譲） */
+.changeWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 非表示のファイル入力 */
+.hiddenInput { display: none; }

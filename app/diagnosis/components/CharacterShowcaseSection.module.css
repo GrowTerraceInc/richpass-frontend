@@ -1,0 +1,108 @@
+/* セクション見出し：中央＆下余白32px、色はgray-900 */
+.heading {
+  text-align: center;
+  margin: 0 0 32px;
+  font-weight: 800;
+  font-size: clamp(22px, 2.6vw, 32px);
+  color: var(--color-gray-900);
+}
+
+/* リスト：狭い画面＝1列、広い画面＝2列。中央寄せ＆固定幅カード */
+.list {
+  display: grid;
+  grid-template-columns: minmax(280px, 540px);  /* 1列時 */
+  justify-content: center;                      /* 列全体を中央に */
+  justify-items: center;                        /* 各カードも中央に */
+  gap: 20px;
+}
+@media (min-width: 1024px) {
+  .list {
+    grid-template-columns: repeat(2, 540px);    /* 2列×2段 */
+    gap: 24px;
+  }
+}
+
+/* ===== カード（可変高さ / 小画面で最小200px） =====
+   幅540px。枠=gray-200、影なし。 */
+.card {
+  /* イラストのサイズをCSS変数で一元管理：小=150px、fluid=40vw、最大=200px */
+  --illu-size: clamp(150px, 40vw, 200px);
+
+  width: min(540px, 96vw);
+
+  /* 小画面：最小200px、画像サイズ＋上下padding(16*2)で自動伸縮
+     大画面：@mediaで260px固定 */
+  min-height: clamp(200px, calc(var(--illu-size) + 32px), 260px);
+
+  border: 1px solid var(--color-gray-200);
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: none;
+
+  display: grid;
+  grid-template-columns: var(--illu-size) 1fr; /* 左=画像 / 右=テキスト */
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+}
+
+/* 交互レイアウト（右に画像・左にテキスト） */
+.reverse {
+  grid-template-columns: 1fr var(--illu-size);
+}
+.reverse .illu { order: 2; }
+.reverse .textArea { order: 1; }
+
+/* 大画面では高さを260pxに固定（ご指定の540×260） */
+@media (min-width: 1024px) {
+  .card { height: 260px; }
+}
+
+/* イラスト：縦横とも可変（150〜200px） */
+.illu {
+  position: relative;
+  width: var(--illu-size);
+  height: var(--illu-size);
+  overflow: hidden;
+  border-radius: 10px; /* 任意：不要なら削除 */
+}
+.illuImg { object-fit: cover; }
+
+/* テキスト：色はすべてgray-900 */
+.textArea {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--color-gray-900);
+}
+
+/* カード内見出しは h2 使用 */
+.title {
+  margin: 0 0 8px;
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 1.45;
+  color: var(--color-gray-900);
+}
+
+/* 本文はボディ用サイズ（14px相当） */
+.desc {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--color-gray-900);
+}
+
+/* 下部注記 */
+.note {
+  margin: 16px 0 0;
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-gray-900);
+}
+
+/* 極小端末の詰まり対策 */
+@media (max-width: 360px) {
+  .card { padding: 12px; gap: 12px; }
+}

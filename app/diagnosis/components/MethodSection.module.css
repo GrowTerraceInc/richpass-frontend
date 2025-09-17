@@ -1,0 +1,70 @@
+/* セクション背景はダーク、見出しは白 */
+.dark { background: #2b2b2b; }
+.inner { text-align: center; }
+
+.heading {
+  color: #ffffff;
+  font-weight: 800;
+  font-size: clamp(22px, 2.6vw, 32px);
+  letter-spacing: .01em;
+  margin: 0 0 32px;          /* ヘッドライン下の余白 32px */
+}
+
+/* カードは中央寄せ。タブレットで左寄りにならないよう列幅を固定＆中央寄せ */
+.grid {
+  display: grid;
+  gap: 48px;                                  /* カード間 48px */
+  grid-template-columns: minmax(260px, 360px);/* ← 1列時も列幅を固定して中央寄せ可能に */
+  justify-content: center;                    /* 列(トラック)を中央へ */
+  justify-items: center;                      /* 各カードも中央へ */
+}
+@media (min-width: 900px) {
+  .grid { grid-template-columns: repeat(2, 360px); }
+}
+
+/* ===== カード本体 ===== */
+.card {
+  width: min(360px, 92vw);
+  /* 高さは 500/360 の比率でスケール（= 約1.3889） */
+  height: calc(min(92vw, 360px) * 1.3888889);
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 4px rgba(0,0,0,.25); /* 指定ドロップシャドウ */
+  display: flex;
+  flex-direction: column;
+}
+
+/* 画像は 360x270（= 4:3） */
+.imageWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3; /* 360 : 270 */
+}
+.imageWrap :global(img) { object-fit: cover; }
+
+/* テキスト領域（背景白） */
+.body {
+  background: #ffffff;
+  padding: 32px 32px;        /* 上下左右 32px */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  text-align: left;
+}
+
+/* 見出し：h3（orange-500）、本文：gray-900 */
+.title {
+  margin: 0 0 12px;          /* ← 見出しと本文の間隔 12px に修正 */
+  color: var(--color-primary-500);    /* #F39C12 */
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.text {
+  margin: 0;
+  color: var(--color-gray-900);       /* #333333 */
+  font-size: 14px;
+  line-height: 1.9;
+}

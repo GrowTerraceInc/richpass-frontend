@@ -1,0 +1,79 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ラベル/説明文の見た目（必要に応じて外部で上書き可） */
+.label {
+  font-weight: 700;
+  color: var(--color-gray-900);
+}
+.desc {
+  color: var(--color-gray-600);
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+/* ===== スイッチ本体 ===== */
+.switch {
+  /* トラックの基本サイズ */
+  --w: 44px;
+  --h: 26px;
+  --pad: 2px;
+  /* ノブ直径 = 高さからパディング分を引いた値 */
+  --d: calc(var(--h) - var(--pad) * 2);
+
+  position: relative;
+  width: var(--w);
+  height: var(--h);
+  border-radius: var(--h);
+  background: var(--color-gray-200);
+  border: 1px solid var(--color-gray-200);
+  cursor: pointer;
+
+  /* 環境差でのズレを抑えるための調整 */
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 0;
+  flex-shrink: 0; /* 横詰め時に縮まない */
+  transition: background-color .15s ease, border-color .15s ease;
+}
+
+.knob {
+  position: absolute;
+  top: 50%;
+  left: var(--pad);                 /* 初期位置（左端） */
+  width: var(--d);
+  height: var(--d);
+  border-radius: 9999px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,.08);
+  transform: translateY(-50%);     /* 常に縦中央へ */
+  transition: left .15s ease;      /* スムーズに移動 */
+}
+
+/* 実際の入力は視覚的に隠す */
+.input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ON 状態 */
+.on {
+  background: var(--color-primary-500);
+  border-color: var(--color-primary-500);
+}
+
+/* ON 位置 = 右端（トラック幅 - ノブ径 - パディング） */
+.on .knob {
+  left: calc(var(--w) - var(--d) - var(--pad));
+}
+
+/* 無効表示 */
+.disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}

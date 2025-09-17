@@ -1,0 +1,99 @@
+id,courseId,lessonId,title,passScore,isPublished
+mindset-1,mindset,mindset-1,「なぜ、今なのか？」理解度チェック,5,TRUE
+mindset-2,mindset,mindset-2,「老後資金は2000万ではなく〇〇万円！？」理解度チェック,5,TRUE
+mindset-3,mindset,mindset-3,「ここからお金の勉強が始まる」理解度チェック,5,TRUE
+mindset-4,mindset,mindset-4,「投資は準備段階で決まる！？即実践の土台作り」理解度チェック,5,TRUE
+mindset-5,mindset,mindset-5,「「お金持ちな自分になる思考」①」理解度チェック,5,TRUE
+mindset-6,mindset,mindset-6,「「お金持ちな自分になる思考」②」理解度チェック,5,TRUE
+mindset-7,mindset,mindset-7,「貯め上手が投資を制す！」理解度チェック,5,TRUE
+mindset-8,mindset,mindset-8,「銀行に預けて大丈夫？」理解度チェック,5,TRUE
+mindset-9,mindset,mindset-9,「お金持ちになる道のり」理解度チェック,5,TRUE
+mindset-10,mindset,mindset-10,「お金持ちの考え方の常識」理解度チェック,5,TRUE
+mindset-11,mindset,mindset-11,「幸福度を上げるお金の使い方」理解度チェック,5,TRUE
+mindset-12,mindset,mindset-12,「お金のなる木を手に入れる方法」理解度チェック,5,TRUE
+finance_basics-1,finance_basics,finance_basics-1,「初心者だからこその投資方法」理解度チェック,5,TRUE
+finance_basics-2,finance_basics,finance_basics-2,「必見！投資信託徹底解説！」理解度チェック,5,TRUE
+finance_basics-3,finance_basics,finance_basics-3,「為替で資産形成の差がつく！？」理解度チェック,5,TRUE
+finance_basics-4,finance_basics,finance_basics-4,「インフレで見落としがちなリスク」理解度チェック,5,TRUE
+nisa-1,nisa,nisa-1,「これだけ抑えて！NISAの特徴」理解度チェック,5,TRUE
+nisa-2,nisa,nisa-2,「よくあるNISA質問集」理解度チェック,5,TRUE
+nisa-3,nisa,nisa-3,「死亡・離婚したときのNISAってどうなる？」理解度チェック,5,TRUE
+ideco-1,ideco,ideco-1,「iDeCoのメリット・デメリット」理解度チェック,5,TRUE
+ideco-2,ideco,ideco-2,「結局iDeCoやる？やらない？」理解度チェック,5,TRUE
+social_security-1,social_security,social_security-1,「社会保障制度と賢くに付き合う心構え」理解度チェック,5,TRUE
+social_security-2,social_security,social_security-2,「知って得する社会保障 ①」理解度チェック,5,TRUE
+social_security-3,social_security,social_security-3,「知って得する社会保障 ②」理解度チェック,5,TRUE
+social_security-4,social_security,social_security-4,「知って得する社会保障 ③」理解度チェック,5,TRUE
+economics-1,economics,economics-1,「金融基礎と金利の徹底解説」理解度チェック,5,TRUE
+economics-2,economics,economics-2,「これぞ！経済の読み解き方！」理解度チェック,5,TRUE
+economics-3,economics,economics-3,「知ってほしい！日銀の役割！」理解度チェック,5,TRUE
+economics-4,economics,economics-4,「増やすだけではない！？資産の守り方」理解度チェック,5,TRUE
+asset_formation-1,asset_formation,asset_formation-1,「理想の資産形成とは」理解度チェック,5,TRUE
+asset_formation-2,asset_formation,asset_formation-2,「単利と複利について」理解度チェック,5,TRUE
+asset_formation-3,asset_formation,asset_formation-3,「ドルコスト平均法」理解度チェック,5,TRUE
+pension1-1,pension1,pension1-1,「年金制度について」理解度チェック,5,TRUE
+pension1-2,pension1,pension1-2,「老後の年金はどう受け取るの？」理解度チェック,5,TRUE
+pension1-3,pension1,pension1-3,「働けなくなったときの国の保障」理解度チェック,5,TRUE
+pension1-4,pension1,pension1-4,「遺族年金の受け取り方」理解度チェック,5,TRUE
+pension2-1,pension2,pension2-1,「知っておきたい企業年金」理解度チェック,5,TRUE
+pension2-2,pension2,pension2-2,「やっておきたい個人年金」理解度チェック,5,TRUE
+financial_products-1,financial_products,financial_products-1,「まずはこれ見て！金融商品（株式編）」理解度チェック,5,TRUE
+financial_products-2,financial_products,financial_products-2,「まずはこれ見て！金融商品（債券・預貯金編）」理解度チェック,5,TRUE
+financial_products-3,financial_products,financial_products-3,「まずはこれ見て！金融商品（投資信託編）」理解度チェック,5,TRUE
+financial_products-4,financial_products,financial_products-4,「まずはこれ見て！金融商品（外貨商品・その他編）」理解度チェック,5,TRUE
+insurance_basics-1,insurance_basics,insurance_basics-1,「保険業界の全体像」理解度チェック,5,TRUE
+insurance_basics-2,insurance_basics,insurance_basics-2,「保険との賢い付き合い方」理解度チェック,5,TRUE
+insurance_basics-3,insurance_basics,insurance_basics-3,「保険商品の仕組み」理解度チェック,5,TRUE
+insurance_products-1,insurance_products,insurance_products-1,「保険の理解（生命保険）」理解度チェック,5,TRUE
+insurance_products-2,insurance_products,insurance_products-2,「保険の理解（医療保険・貯蓄型保険）」理解度チェック,5,TRUE
+insurance_products-3,insurance_products,insurance_products-3,「保険の理解（損害保険）」理解度チェック,5,TRUE
+insurance_products-4,insurance_products,insurance_products-4,「保険の理解（自動車保険）」理解度チェック,5,TRUE
+insurance_products-5,insurance_products,insurance_products-5,「保険の理解（損害保険）」理解度チェック,5,TRUE
+insurance_products-6,insurance_products,insurance_products-6,「保険の理解（損害保険）」理解度チェック,5,TRUE
+tax-1,tax,tax-1,「税金の基礎」理解度チェック,5,TRUE
+tax-2,tax,tax-2,「会社員と税金」理解度チェック,5,TRUE
+tax-3,tax,tax-3,「その他の所得税」理解度チェック,5,TRUE
+tax-4,tax,tax-4,「金融商品と税金」理解度チェック,5,TRUE
+tax_return-1,tax_return,tax_return-1,「知って損はない！所得控除」理解度チェック,5,TRUE
+tax_return-2,tax_return,tax_return-2,「知って損はない！税金控除」理解度チェック,5,TRUE
+tax_return-3,tax_return,tax_return-3,「確定申告の仕方」理解度チェック,5,TRUE
+life_planning-1,life_planning,life_planning-1,「ライフプランニングの考え方」理解度チェック,5,TRUE
+life_planning-2,life_planning,life_planning-2,「ライフイベントとかかる費用」理解度チェック,5,TRUE
+life_planning-3,life_planning,life_planning-3,「4大支出」理解度チェック,5,TRUE
+life_planning-4,life_planning,life_planning-4,「理想の人生を描き方」理解度チェック,5,TRUE
+real_estate-1,real_estate,real_estate-1,「不動産投資とは」理解度チェック,5,TRUE
+real_estate-2,real_estate,real_estate-2,「レバレッジ効果について」理解度チェック,5,TRUE
+real_estate-3,real_estate,real_estate-3,「不動産投資のメリット」理解度チェック,5,TRUE
+real_estate-4,real_estate,real_estate-4,「リスクと対策」理解度チェック,5,TRUE
+real_estate-5,real_estate,real_estate-5,「不動産投資における出口戦略」理解度チェック,5,TRUE
+real_estate-6,real_estate,real_estate-6,「REITとは？」理解度チェック,5,TRUE
+inheritance-1,inheritance,inheritance-1,「相続基礎」理解度チェック,5,TRUE
+inheritance-2,inheritance,inheritance-2,「相続の方法と種類」理解度チェック,5,TRUE
+inheritance-3,inheritance,inheritance-3,「相続税について」理解度チェック,5,TRUE
+inheritance-4,inheritance,inheritance-4,「贈与税と課税制度」理解度チェック,5,TRUE
+hometown_tax-1,hometown_tax,hometown_tax-1,「ふるさと納税基礎編」理解度チェック,5,TRUE
+hometown_tax-2,hometown_tax,hometown_tax-2,「ふるさと納税実践編」理解度チェック,5,TRUE
+mileage_trip-1,mileage_trip,mileage_trip-1,「マイル活用 前編」理解度チェック,5,TRUE
+mileage_trip-2,mileage_trip,mileage_trip-2,「マイル活用 後編」理解度チェック,5,TRUE
+point_hacking-1,point_hacking,point_hacking-1,「ポイ活 前編」理解度チェック,5,TRUE
+point_hacking-2,point_hacking,point_hacking-2,「ポイ活 後編」理解度チェック,5,TRUE
+ai-1,ai,ai-1,「AIとは」理解度チェック,5,TRUE
+ai-2,ai,ai-2,「世界のAI市場」理解度チェック,5,TRUE
+ai-3,ai,ai-3,「AIを実際に使ってみよう」理解度チェック,5,TRUE
+global_finance-1,global_finance,global_finance-1,「日本人が知らない海外の金融事情 前編」理解度チェック,5,TRUE
+global_finance-2,global_finance,global_finance-2,「日本人が知らない海外の金融事情 後編」理解度チェック,5,TRUE
+global_finance-3,global_finance,global_finance-3,「日本人のお金に対する間違った考え方」理解度チェック,5,TRUE
+kids_money_education-1,kids_money_education,kids_money_education-1,「子どものお小遣い 知識編」理解度チェック,5,TRUE
+kids_money_education-2,kids_money_education,kids_money_education-2,「子どものお小遣い 具体的な方法」理解度チェック,5,TRUE
+kids_money_education-3,kids_money_education,kids_money_education-3,「子どものお小遣い 考え方編」理解度チェック,5,TRUE
+fx-1,fx,fx-1,「初心者でもわかるFX」理解度チェック,5,TRUE
+fx-2,fx,fx-2,「FXで利益を得る仕組み」理解度チェック,5,TRUE
+fx-3,fx,fx-3,「FX失敗談やリスク管理」理解度チェック,5,TRUE
+crypto-1,crypto,crypto-1,「暗号資産とは？」理解度チェック,5,TRUE
+crypto-2,crypto,crypto-2,「ブロックチェーンとは？」理解度チェック,5,TRUE
+crypto-3,crypto,crypto-3,「暗号資産の今後とリスク」理解度チェック,5,TRUE
+nft-1,nft,nft-1,「NFTとは？」理解度チェック,5,TRUE
+nft-2,nft,nft-2,「NFTの魅力」理解度チェック,5,TRUE
+nft-3,nft,nft-3,「NFTのリスク管理」理解度チェック,5,TRUE
+metaverse-1,metaverse,metaverse-1,「メタバース前編」理解度チェック,5,TRUE
+metaverse-2,metaverse,metaverse-2,「メタバース後編」理解度チェック,5,TRUE

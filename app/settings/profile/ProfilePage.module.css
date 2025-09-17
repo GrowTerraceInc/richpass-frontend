@@ -1,0 +1,96 @@
+.header {
+  text-align: center;
+  margin: 32px 0 40px;
+}
+.title {
+  font-size: var(--h2-size);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: #0f172a;
+  margin: 0;
+}
+
+.wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  display: grid;
+  gap: 24px;
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+}
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* 現在のプラン：薄いオレンジ背景で強調 */
+.currentCard {
+  background: var(--color-primary-100);
+  border: 1px solid var(--color-primary-600);
+  border-radius: 12px;
+  padding: 16px;
+  display: grid;
+  gap: 8px;
+}
+
+.row { display: flex; gap: 8px; align-items: center; }
+.label { color: var(--color-gray-700); font-size: 14px; min-width: 110px; }
+.value { color: var(--color-gray-900); font-weight: 700; }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* ▼ モバイル：ボタンを小さく・横並びに */
+@media (max-width: 640px) {
+  .actions { flex-wrap: nowrap; }
+  .actions :global(a) { flex: 1 1 0; }
+}
+
+/* 履歴セクション */
+.historyCard {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-100);
+  border-radius: 12px;
+  padding: 16px;
+  display: grid;
+  gap: 8px;
+}
+
+.h2 { font-weight: 800; color: #111827; margin: 0 0 4px; }
+
+.historyList { display: grid; gap: 8px; }
+
+.historyRow {
+  display: grid;
+  grid-template-columns: 140px 1fr 140px 120px;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid var(--color-gray-100);
+}
+.historyRow:first-of-type { border-top: none; }
+
+.colMuted { color: var(--color-gray-600); font-size: 14px; }
+.colRight { text-align: right; }
+
+/* ▼ モバイル：1段目=日付のみ、2段目=内容・金額・領収書を横一列 */
+@media (max-width: 640px) {
+  .historyRow {
+    grid-template-columns: 1fr auto auto;   /* desc | amount | receipt */
+    grid-template-areas:
+      "date date date"
+      "desc amount receipt";
+  }
+  .colDate    { grid-area: date; }
+  .colDesc    { grid-area: desc; }
+  .colAmount  { grid-area: amount; text-align: right; }
+  .colReceipt { grid-area: receipt; display: flex; justify-content: flex-end; }
+}

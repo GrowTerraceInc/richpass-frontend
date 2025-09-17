@@ -1,0 +1,67 @@
+/* 見出し（ダークトーン） */
+.heading {
+  text-align: center;
+  color: #0f172a;
+  font-weight: 800;
+  font-size: clamp(22px, 2.6vw, 32px);
+  letter-spacing: 0.01em;
+  margin: 0 0 32px;
+}
+
+/* カード幅を約360pxに固定しつつ、狭い画面では縮む／中央寄せ */
+.grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: minmax(260px, 360px);
+  justify-content: center;
+}
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(260px, 360px));
+  }
+}
+
+/* 白カード：gray-200の枠線、影なし */
+.card {
+  background: #ffffff;
+  border: 1px solid var(--color-gray-200);
+  border-radius: 14px;
+  padding: 24px 20px;
+  text-align: center;
+  box-shadow: none;
+}
+
+/* アイコン：55×55 の丸、中身は 35×35 */
+.iconCircle {
+  width: 55px;
+  height: 55px;
+  margin: 0 auto 12px;
+  border-radius: 999px;
+  background: var(--color-primary-100);
+  display: grid;
+  place-items: center;
+}
+.icon {
+  display: block;
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+}
+
+/* タイトル / テキスト */
+.cardTitle {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 900;
+  color: #111827;
+  line-height: 1.45;
+}
+.cardText {
+  margin: 0;
+  font-size: 14px;
+  color: #4b5563;
+  line-height: 1.9;
+  max-width: 40ch;
+  margin-inline: auto;
+  text-wrap: pretty;
+}

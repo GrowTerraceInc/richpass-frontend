@@ -1,0 +1,96 @@
+/* app/diagnosis/components/RegistrationPromo.module.css */
+
+/* 画面上側に余白を持たせて“上寄せ”表示 */
+.promoSection {
+  /* 押し出し：全画面相当に見せる */
+  min-height: 100dvh;            /* ← 100vh より実機で安定 */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;        /* 上寄せ */
+  background: var(--color-white, #fff);
+
+  /* 上にしっかり余白＋安全域を確保 */
+  padding: clamp(24px, 4vw, 56px) 16px;
+  padding-top: max(clamp(72px, 12vw, 140px), env(safe-area-inset-top));
+}
+
+.inner {
+  width: 100%;
+  max-width: 880px;
+  text-align: center;
+  margin: 0 auto;
+  animation: fadeIn 360ms ease both;
+}
+
+/* 画像：デスクトップで 270x180、下では流体縮小 */
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: clamp(16px, 3vw, 24px);
+}
+.heroImg {
+  width: clamp(180px, 40vw, 270px);
+  height: auto; /* アスペクト比維持 */
+}
+@media (min-width: 1024px) {
+  .heroImg { width: 270px; height: 180px; }
+}
+
+.title {
+  font-weight: 900;
+  color: var(--color-gray-900, #333);
+  font-size: clamp(24px, 3.2vw, 36px);
+  margin: 0 0 clamp(8px, 1.6vw, 12px);
+}
+
+.desc {
+  color: #475569; /* slate-600 */
+  font-size: clamp(14px, 1.8vw, 16px);
+  line-height: 1.9;
+  margin: 0 0 clamp(20px, 3vw, 28px);
+}
+
+/* メリットカード（中央寄せ） */
+.benefitsCard {
+  background: #fffaf0; /* 薄いオレンジ */
+  border: 1px solid #f8e0b8;
+  border-radius: 16px;
+  padding: clamp(18px, 3vw, 24px);
+  margin: 0 auto clamp(24px, 3.2vw, 32px);
+  max-width: 620px;
+  box-shadow: 0 10px 24px rgba(17, 24, 39, 0.06);
+  text-align: center; /* カード内テキスト中央 */
+}
+.cardHeading {
+  margin: 0 0 10px;
+  font-weight: 800;
+  color: var(--color-gray-900, #333);
+  font-size: clamp(16px, 2.2vw, 18px);
+}
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+  color: var(--color-gray-900, #333);
+  font-size: clamp(14px, 2vw, 16px);
+  justify-items: center; /* 各行も中央に */
+}
+
+/* CTA */
+.ctaWrap { margin-top: clamp(16px, 2.6vw, 24px); }
+.ctaLinkReset { text-decoration: none; }
+
+/* SPのみボタン文言を2行に分ける */
+.brSmOnly { display: none; }
+@media (max-width: 480px) {
+  .brSmOnly { display: inline; }
+}
+
+/* small animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

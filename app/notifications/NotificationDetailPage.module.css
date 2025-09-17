@@ -1,0 +1,66 @@
+/* 記事本文の横幅を少し狭めて読みやすく */
+.article {
+  max-width: var(--container-sm); /* 760px */
+  margin: 0 auto;
+}
+
+/* タイトルをブログ見出しっぽく強めに */
+.title {
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: #0f172a;
+  margin: 8px 0 8px;
+  font-size: clamp(26px, 3.2vw, 36px); /* h2より一段だけ大きく */
+  line-height: 1.35;
+}
+
+/* 投稿日などのメタ行 */
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-gray-600);
+  font-size: 14px;
+  margin: 8px 0 24px;
+}
+
+/* 区切り用のドット（ブログっぽい） */
+.dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background: var(--color-gray-400);
+  display: inline-block;
+}
+
+/* 種別バッジ（重要など） */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 12px;
+  border: 1px solid var(--color-gray-200);
+  color: var(--color-gray-700);
+  background: var(--color-gray-50);
+}
+
+.badge--important {
+  border-color: var(--color-error);
+  color: var(--color-error);
+  background: #fff5f4;
+}
+
+/* カレンダーアイコンのサイズと色 */
+.metaIcon {
+  width: 18px;
+  height: 18px;
+  stroke: var(--color-gray-600);
+}
+
+/* 本文（Markdown）の上余白を少し詰める */
+.content {
+  margin-top: 8px;
+}

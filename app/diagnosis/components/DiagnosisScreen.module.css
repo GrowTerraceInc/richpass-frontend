@@ -1,0 +1,215 @@
+/* app/diagnosis/components/DiagnosisScreen.module.css */
+
+:root {
+  /* フォールバック（globals.css が無い環境でも崩さない） */
+  --brand-500: var(--color-primary-500, #f39c12);
+  --brand-600: var(--color-primary-600, #e67e22);
+  --brand-100: var(--color-primary-100, #fffaf0);
+  --gray-900: var(--color-gray-900, #333333);
+  --gray-700: #374151;
+  --gray-600: var(--color-gray-600, #555555);
+  --gray-500: #6b7280;
+  --gray-300: #e5e7eb;
+  --gray-200: var(--color-gray-200, #dddddd);
+  --white: #ffffff;
+}
+
+.screen {
+  width: 100%;
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  /* 変形時のはみ出しで横スクロールが出ないように */
+  overflow-x: hidden;
+}
+
+/* ===== Header / Progress ===== */
+.header {
+  padding: 20px 16px 8px;
+}
+
+.progressRow {
+  max-width: 980px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.progressTrack {
+  position: relative;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--gray-300);
+  overflow: hidden;
+}
+.progressFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--brand-500);
+  border-radius: 999px;
+  width: 0%;
+  transition: width 240ms ease;
+}
+.counter {
+  font-weight: 700;
+  color: var(--gray-600);
+  min-width: 84px;
+  text-align: right;
+}
+
+/* ===== Main / Question ===== */
+.main {
+  padding: 12px 16px 24px;
+}
+.qPane {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.chapter {
+  color: var(--gray-600);
+  font-weight: 800;
+  margin: 16px 0 12px;
+  font-size: clamp(14px, 2vw, 18px);
+}
+
+.title {
+  color: var(--gray-900);
+  font-weight: 900;
+  line-height: 1.5;
+  margin: 0 0 18px;
+  font-size: clamp(20px, 3vw, 28px);
+}
+
+.options {
+  display: grid;
+  gap: 14px;
+  margin-top: 10px;
+  /* 幅を少し絞ったボタンを中央に寄せる */
+  justify-items: center;
+}
+
+.option {
+  /* モバイルはそのまま全幅 */
+  width: 100%;
+  display: block;
+  text-align: left;
+  background: var(--white);
+  color: var(--gray-900);
+  border: 1px solid var(--gray-200);
+  border-radius: 12px;
+  padding: clamp(14px, 1.8vw, 18px) clamp(16px, 2.2vw, 20px);
+  font-size: clamp(15px, 1.8vw, 16px);
+  line-height: 1.6;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    background 120ms ease,
+    color 120ms ease,
+    border-color 120ms ease;
+  will-change: transform;
+  transform-origin: center;
+}
+.option:hover,
+.option:focus-visible {
+  border-color: var(--brand-500);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-500) 25%, transparent);
+  outline: none;
+}
+.selected {
+  background: var(--brand-600);
+  color: var(--white);
+  border-color: var(--brand-600);
+  transform: scale(1.05); /* 選択時フィードバック */
+}
+
+/* タブレット〜で少し幅を絞る（scale 1.05 でもはみ出さないマージン） */
+@media (min-width: 768px) {
+  .option {
+    width: 95%;
+  }
+}
+/* ノートPC〜でさらに少しだけ絞る（余裕を確保） */
+@media (min-width: 1024px) {
+  .option {
+    width: 94%;
+  }
+}
+
+/* ===== Slide Animations ===== */
+.slideInFwd { animation: slideInRight 320ms ease both; }
+.slideInBack { animation: slideInLeft 320ms ease both; }
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ===== Footer / Navigation Buttons ===== */
+.footer {
+  position: sticky;
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    var(--white),
+    color-mix(in srgb, var(--white) 65%, transparent)
+  );
+  padding: 16px 16px 24px;
+}
+
+/* ボタン行：基本は縦積み、768px以上で同幅2列に */
+.navRow {
+  max-width: 980px;
+  margin: 0 auto;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr; /* モバイル＝縦一列 */
+}
+@media (min-width: 768px) {
+  .navRow {
+    grid-template-columns: 1fr 1fr; /* 大画面＝同幅2列 */
+  }
+}
+
+/* ボタンはセルいっぱいに広げる */
+.backBtn,
+.nextBtn {
+  width: 100%;
+}
+
+/* 戻る */
+.backBtn {
+  height: 56px; /* 次へ と高さを合わせる */
+  border-radius: 999px;
+  border: 1px solid var(--gray-300);
+  background: var(--white);
+  color: var(--gray-700);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 120ms ease, opacity 120ms ease, transform 120ms ease;
+}
+.backBtn:hover:not(:disabled) { background: #f9fafb; }
+.backBtn:active:not(:disabled) { transform: translateY(1px); }
+.backBtn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* 次へ */
+.nextBtn {
+  height: 56px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: var(--brand-500);
+  color: var(--white);
+  font-weight: 800;
+  font-size: 16px;
+  transition: filter 120ms ease, transform 120ms ease, opacity 120ms ease;
+}
+.nextBtn:hover:not(:disabled) { filter: brightness(1.05); }
+.nextBtn:active:not(:disabled) { transform: translateY(1px); }
+.nextBtn:disabled { opacity: 0.5; cursor: not-allowed; }

@@ -1,0 +1,106 @@
+.header {
+  text-align: center;
+  margin: 32px 0 40px;
+}
+.title {
+  font-size: var(--h2-size);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: #0f172a;
+  margin: 0;
+}
+
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  display: grid;
+  gap: 16px;
+  padding-bottom: 48px; /* フッターとの距離 */
+}
+
+.card {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-100);
+  border-radius: 12px;
+  padding: 16px;
+  display: grid;
+  gap: 16px;
+}
+
+.sectionTitle {
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 6px;
+}
+
+/* 注意事項 */
+.list {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--color-gray-700);
+  line-height: 1.8;
+}
+
+/* 理由の囲み（任意・複数選択可） */
+.reasonCard {
+  border: 1px solid var(--color-gray-200);
+  background: var(--color-gray-50);
+  border-radius: 12px;
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+}
+.reasons {
+  display: grid;
+  gap: 10px;
+}
+.reasonRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 自由記述 */
+.textarea {
+  width: 100%;
+  min-height: 80px;
+  border: 1px solid var(--color-gray-200);
+  border-radius: 10px;
+  padding: 10px;
+  resize: vertical;
+  font-size: 14px;
+  color: var(--color-gray-900);
+}
+
+/* 同意行 */
+.confirm {
+  display: grid;
+  gap: 10px;
+}
+.confirmRow {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 中央寄せ */
+  gap: 10px;
+}
+
+.note {
+  color: var(--color-gray-600);
+  font-size: 13px;
+  text-align: center;       /* 中央寄せ */
+}
+
+/* ボタン中央寄せ */
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+@media (max-width: 640px) {
+  .actions :global(a),
+  .actions :global(button) {
+    flex: 0 0 auto;
+  }
+}

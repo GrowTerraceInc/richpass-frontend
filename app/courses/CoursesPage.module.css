@@ -1,0 +1,24 @@
+.title {
+  /* タイトルの下にしっかり余白を作る */
+  margin: 32px 0 16px;
+  text-align: center;
+}
+@media (max-width: 680px) {
+  .title { margin: 24px 0 12px; }
+}
+
+/* カードグリッド：下に余白を追加（フッターと密着しない） */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;     /* 子(.card)のheight:100%とセットで高さ揃え */
+  padding-bottom: 96px;     /* フッター前の余白 */
+}
+
+/* 画面幅に応じた列数（スマホでも基本3列） */
+@media (max-width: 1100px) { .grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 900px)  { .grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 680px)  { .grid { grid-template-columns: repeat(3, 1fr); gap: 12px; } }
+@media (max-width: 480px)  { .grid { grid-template-columns: repeat(3, 1fr); gap: 8px; } }
+@media (max-width: 340px)  { .grid { grid-template-columns: repeat(2, 1fr); } }

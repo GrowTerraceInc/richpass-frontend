@@ -1,0 +1,114 @@
+.page {
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.searchWrap {
+  margin: 0 auto 16px;
+}
+
+.search {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--color-gray-200);
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+/* 外枠カード（カテゴリを束ねる） */
+.groupCard {
+  border: 1px solid var(--color-gray-200);
+  border-radius: 12px;
+  background: var(--color-white);
+  overflow: hidden;
+}
+
+/* ====== カテゴリ（親アコーディオン） ====== */
+.cat {
+  border-top: 1px solid var(--color-gray-100);
+}
+.cat:first-of-type { border-top: none; }
+
+.cat summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 14px 16px;
+
+  /* ★ カテゴリだけ薄オレンジ */
+  background: var(--color-primary-100);
+  border-bottom: 1px solid var(--color-gray-100);
+
+  font-weight: 800;
+  color: #111827;
+}
+.cat summary::-webkit-details-marker { display: none; }
+.cat summary:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: -2px;
+}
+
+.caret {
+  transition: transform .15s ease;
+  color: var(--color-primary-600);
+}
+.cat[open] .caret { transform: rotate(90deg); }
+
+/* カテゴリ内のリストコンテナ */
+.qList {
+  padding: 8px 12px 12px;
+  display: grid;
+  gap: 8px;
+  /* 背景は透明にして、各質問カードで色を付ける */
+  background: transparent;
+}
+
+/* ====== 質問（子アコーディオン） ====== */
+.q {
+  border: 1px solid var(--color-gray-200);
+  border-radius: 10px;
+  background: var(--color-gray-50);   /* ★ 質問はグレー背景 */
+  overflow: hidden;
+}
+.q summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 12px;
+  font-weight: 700;
+  color: var(--color-gray-900);
+  /* 背景は継承＝カードのグレー */
+  background: transparent;
+}
+.q summary::-webkit-details-marker { display: none; }
+
+/* 回答は白地で可読性を確保 */
+.answer {
+  padding: 8px 12px 12px;
+  color: var(--color-gray-900);
+  line-height: 1.9;
+  background: var(--color-white);
+  border-top: 1px solid var(--color-gray-100);
+}
+
+/* 「該当なし」のとき */
+.empty {
+  color: var(--color-gray-600);
+  text-align: center;
+  padding: 24px 0;
+}
+
+/* フッターに沈まないよう余白 */
+.tail {
+  height: 16px;
+}

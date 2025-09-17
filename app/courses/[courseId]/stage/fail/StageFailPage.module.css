@@ -1,0 +1,21 @@
+.wrap { text-align: center; padding: 32px 0 72px; overflow-x: hidden; }
+
+/* 画像は中央寄せ＋はみ出し防止 */
+.illust { display:grid; place-items:center; margin-bottom: 12px; padding: 0 12px; }
+/* Image 側で style={width:100%,height:auto} を指定するため、ここでは max-width のみ */
+.illustImg { display:block; max-width: 420px; }
+
+.badge { display: inline-block; padding: 6px 12px; border: 1px solid var(--color-gray-200); border-radius: 9999px; background:#fff; color: var(--color-gray-700); margin-bottom: 12px; }
+
+/* Clear と同じタイトル位置用（Failでも使う） */
+.testTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-gray-600);
+  margin-bottom: 6px;
+}
+
+.h1 { font-size: 28px; font-weight: 900; color: var(--color-gray-900); margin: 8px 0; }
+.score { color: var(--color-danger-600, #e03131); font-size: 20px; margin: 6px 0 10px; }
+.msg { color: var(--color-gray-700); max-width: 560px; margin: 0 auto 18px; }
+.actions { display: grid; gap: 12px; justify-content: center; }

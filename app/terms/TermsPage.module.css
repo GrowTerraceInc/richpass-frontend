@@ -1,0 +1,62 @@
+.title {
+  text-align: center;
+  font-size: var(--h2-size);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: #0f172a;
+  margin: 12px 0 16px;
+}
+
+/* ▼ ここに “区切り線／更新日／本文” を入れて幅を統一する */
+.content {
+  max-width: 920px;
+  margin: 0 auto;
+  padding-bottom: 48px;  /* ← フッターとの距離を確保 */
+}
+
+/* オレンジの区切り線（content 幅にフィット） */
+.divider {
+  height: 3px;
+  background: var(--color-primary-500);
+  border-radius: 2px;
+  margin: 0 0 12px 0;
+  width: 100%;
+}
+
+.updated {
+  text-align: right;
+  color: var(--color-gray-600);
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+/* 本文（Markdown） */
+.markdownArea {
+  width: 100%;
+  color: var(--color-gray-900);
+  line-height: 1.9;
+}
+
+/* ## 見出し */
+.markdownArea h2 {
+  font-weight: 800;
+  font-size: 20px;
+  margin: 32px 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-gray-200);
+  letter-spacing: 0.01em;
+}
+.markdownArea h2:first-of-type {
+  margin-top: 0;
+}
+
+.markdownArea p { margin: 12px 0; }
+
+/* 箇条書きの左端を段落と合わせる */
+.markdownArea ul,
+.markdownArea ol {
+  margin: 10px 0;
+  padding-left: 0;
+  list-style-position: inside;
+}
+.markdownArea li { margin: 6px 0; }

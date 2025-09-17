@@ -1,0 +1,65 @@
+.wrap { padding-bottom: 56px; }
+
+/* パンくずの位置統一 */
+.header { margin: 0 0 16px; }
+
+/* タイトル行：タイトル左、ブックマーク右 */
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+/* タイトルをデバイスに応じて拡大 */
+.h1 {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 8px 0 16px;
+  color: var(--color-gray-900);
+}
+@media (min-width: 640px) { .h1 { font-size: 26px; margin: 10px 0 18px; } }
+@media (min-width: 1024px) { .h1 { font-size: 32px; margin: 12px 0 20px; } }
+
+/* プレイヤーの横幅コンテナ */
+.player {
+  width: 100%;
+  max-width: 1120px;
+  margin: 12px auto 28px;
+}
+
+/* 解説テキストの横幅・余白 */
+.summary {
+  max-width: 960px;
+  margin: 24px auto 0;
+}
+.subTitle {
+  display: inline-block;
+  padding-bottom: 6px;
+  border-bottom: 3px solid var(--color-primary-400, #FFB951);
+  color: var(--color-gray-900);
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+/* CTA行 */
+.cta { display: grid; place-items: center; margin: 28px 0 0; }
+.ctaWrap { position: relative; display: inline-block; }
+.ctaOverlay {
+  position: absolute; inset: 0; background: transparent; border: 0; padding: 0;
+  cursor: not-allowed; border-radius: 9999px;
+}
+.ctaOverlay:focus { outline: 2px solid var(--color-primary-400, #FFB951); outline-offset: 2px; }
+
+/* --- モーダル --- */
+.modalBackdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,.4);
+  display: flex; align-items: center; justify-content: center; z-index: 50;
+}
+.modal {
+  width: 90%; max-width: 420px; background: #fff; border-radius: 16px;
+  padding: 18px 18px 14px; box-shadow: 0 14px 40px rgba(0,0,0,.18);
+}
+.modalTitle { margin: 4px 0 8px; font-weight: 800; color: var(--color-gray-900); }
+.modalBody { color: var(--color-gray-800, #334155); font-size: 14px; line-height: 1.6; }
+.modalActions { display: flex; justify-content: center; gap: 8px; margin-top: 14px; }

@@ -1,0 +1,16 @@
+.container {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: clamp(32px, 6vw, 72px) 16px;
+  text-align: center;
+}
+.emoji { font-size: clamp(48px, 8vw, 72px); }
+.title {
+  font-weight: 900; color: var(--color-gray-900, #111827);
+  font-size: clamp(24px, 4vw, 40px);
+  line-height: 1.2;
+  margin: 12px 0 10px;
+}
+.lead { color: #6b7280; line-height: 1.9; }
+.cta { margin-top: 24px; }
+.linkReset { text-decoration: none; }

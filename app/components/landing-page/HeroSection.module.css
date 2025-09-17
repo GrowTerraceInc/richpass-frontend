@@ -1,0 +1,187 @@
+.hero {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  min-height: 600px;          /* 基本高さ */
+  width: 100%;
+  overflow: hidden;
+}
+
+/* 背景ラッパー（absolute） */
+.bgMedia {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* 背景画像：右寄せ + 微スライドで“もう少し右”に見せる */
+.bgImage {
+  object-fit: cover;
+  object-position: 72% center;           /* PC基準の構図 */
+  transform: translateX(-2%) scale(1.08);/* ← 左へ少しスライド＝右寄りに見える */
+  will-change: transform;
+}
+
+/* 全面オーバーレイ：透過（0） */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+}
+
+/* モバイル下部グラデーション（説明+CTAの可読性UP：SPのみON） */
+.gradientBottom {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 40%;
+  background: linear-gradient(0deg, rgba(0,0,0,0.48) 0%, rgba(0,0,0,0) 100%);
+  pointer-events: none;
+  display: none;
+}
+
+/* コンテンツレイヤー */
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;                  /* 1280px帯の左寄り感を軽減 */
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.top { margin-bottom: 16px; }
+
+/* 説明+CTA（グリッドで縦に積む） */
+.bottom {
+  display: grid;
+  gap: 16px;
+  align-items: start;
+  justify-items: start;            /* 子要素は伸ばさない：内容幅に合わせる */
+  max-width: 560px;
+}
+
+/* タイポグラフィ（影で可読性UP） */
+.title, .description {
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.38);
+  margin: 0;
+}
+
+/* タイトル：最小サイズ26pxを保証しつつ控えめに */
+.title {
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  line-height: 1.25;
+  text-align: left;
+  font-size: clamp(26px, 4.2vw, 46px);
+}
+
+.description {
+  font-weight: 500;
+  line-height: 1.9;
+  opacity: 0.98;
+  text-align: left;
+  font-size: clamp(14px, 2.3vw, 18px);
+}
+
+/* モバイル強制改行用：デフォは inline */
+.lineMobileBlock { display: inline; }
+
+/* デスクトップでだけ 2行目の後に改行（=「自信に変える。」の後） */
+.brDesktop::after {
+  content: "";
+  display: none;
+}
+
+/* ===== タブレット/デスクトップの共通調整 ===== */
+@media (min-width: 768px) {
+  .content {
+    padding: 48px 48px 56px 56px;  /* 左に少し厚めの余白で視線誘導 */
+    justify-content: center;
+  }
+  .brDesktop::after { display: block; } /* 2行構成を保証 */
+}
+
+/* ===== タブレット狭幅（768–1023px）=====
+   タイトルはSP同様に改行、説明/CTAは“左寄せ” */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* タイトルのみ改行を強制、デスクトップ用の疑似改行は無効化 */
+  .lineMobileBlock { display: block; }
+  .brDesktop::after { display: none; }
+
+  /* 背景はSPに近い構図＋微スライド */
+  .bgImage {
+    object-position: 80% center;
+    transform: translateX(-1.5%) scale(1.08);
+  }
+  .gradientBottom { display: block; }
+
+  /* ★説明/CTAは左寄せ（要素も文章も） */
+  .bottom {
+    justify-items: start;
+    align-items: start;
+    text-align: left;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .description { text-align: left; }
+
+  /* CTAボタンは引き伸ばさない（内容幅で表示） */
+  .bottom :global(button) {
+    inline-size: max-content;
+    width: auto;
+    align-self: start;
+  }
+}
+
+/* ===== タブレット広め（1024–1199px）：被写体をさらに右へ寄せる ===== */
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .bgImage {
+    object-position: 82% center;
+    transform: translateX(-3%) scale(1.08);
+  }
+}
+
+/* 1200–1439px：1395px付近の見え方に寄せ + ほんの少しスライド強め */
+@media (min-width: 1200px) and (max-width: 1439px) {
+  .bgImage {
+    object-position: 72% center;
+    transform: translateX(-2.5%) scale(1.08);
+  }
+}
+
+/* 1440px以上：わずかに右寄せ + スライドは控えめ */
+@media (min-width: 1440px) {
+  .bgImage {
+    object-position: 75% center;
+    transform: translateX(-2%) scale(1.06);
+  }
+}
+
+/* 1680px以上：高さを 750px に */
+@media (min-width: 1680px) {
+  .hero { min-height: 750px; }
+}
+
+/* ===== モバイル（～767px）：タイトル改行 + 説明/CTA中央寄せ ===== */
+@media (max-width: 767px) {
+  .lineMobileBlock { display: block; }    /* タイトル強制改行（SP） */
+  .bgImage {
+    object-position: 80% center;
+    transform: translateX(-1%) scale(1.08);
+  }
+  .gradientBottom { display: block; }
+
+  .bottom {
+    align-items: center;
+    justify-items: center;                /* ボタン幅は内容幅のまま中央に */
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .description { text-align: center; }
+}

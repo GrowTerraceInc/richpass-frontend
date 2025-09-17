@@ -1,0 +1,2 @@
+userId,status,currentPlanId,renewsAt,cancelAtPeriodEnd,last4
+u_demo_001,active,free,2025-12-31T00:00:00Z,false,4242

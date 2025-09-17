@@ -1,0 +1,66 @@
+/* ページ全体 */
+.wrap { padding-bottom: 56px; }
+
+/* パンくず＋タイトル（container 内） */
+.header { margin: 0 0 16px; }
+
+/* 2行タイトル（中央寄せ） */
+.h1 {
+  margin: 8px 0 18px;
+  text-align: center;
+}
+.h1Main {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-gray-900);
+  line-height: 1.35;
+}
+.h1Sub {
+  display: block;
+  margin-top: 4px;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--color-gray-800);
+  letter-spacing: 0.02em;
+}
+
+/* Runner 外側（セクションとしての余白） */
+.runner { padding-bottom: 56px; }
+
+/* 設問と同じ横幅で揃える内側コンテナ */
+.narrow {
+  /* 設問幅。必要なら 720〜960 の間で調整可 */
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* メタ（Q進捗 + バー） */
+.meta {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  align-items: center;
+  gap: 16px;
+  margin: 12px 0 24px;
+}
+.qcount { color: var(--color-gray-800); font-weight: 700; }
+.q { letter-spacing: 0.02em; }
+.total { color: var(--color-gray-500); }
+.progress { height: 10px; width: 100%; }
+
+/* 問題本体 */
+.questionWrap { margin-top: 24px; }
+
+/* モバイル */
+@media (max-width: 768px) {
+  .h1 { margin: 6px 0 14px; }
+  .h1Main { font-size: 18px; }
+  .h1Sub  { font-size: 14px; }
+
+  .narrow { padding: 0 12px; max-width: 100%; }
+
+  .meta { grid-template-columns: 86px 1fr; gap: 12px; margin: 8px 0 20px; }
+  .progress { height: 8px; }
+  .questionWrap { margin-top: 20px; }
+}

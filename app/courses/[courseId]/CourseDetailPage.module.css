@@ -1,0 +1,196 @@
+/* =========================
+   CourseDetailPage.module.css
+   ========================= */
+
+/* Layout & Headers */
+.wrap { padding-bottom: 56px; }
+.header { margin: 0 0 16px; }
+.title { margin: 8px 0 10px; text-align: center; }
+.desc  { color: var(--color-gray-800); margin-bottom: 16px; text-align: center; }
+
+/* Highlight (コースのアウトカム) */
+.highlight {
+  border: 2px solid var(--color-primary-300, #FFD9A3);
+  background: var(--color-primary-100, #fffaf0);
+  /* 上下対称の余白に統一 */
+  padding: 14px 16px;
+  border-radius: 12px;
+  margin: 10px auto 22px;
+  max-width: 960px;
+
+  /* 内部の間隔は gap で管理（タグの素のmarginに依存しない） */
+  display: grid;
+  row-gap: 6px;
+}
+.hlTitle     { margin: 0; color: var(--color-primary-700, #C96B00); }
+.highlight p { margin: 0; }
+
+/* Progress */
+.progressRow {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  align-items: center;
+  gap: 12px;
+  /* ハイライトと同幅・中央寄せ */
+  max-width: 960px;
+  margin: 14px auto 18px;
+}
+/* ← ここで progress の色を “緑” に固定 */
+.progress { height: 10px; --bar-color: #22c55e; }  /* green-500 相当 */
+.actions  { margin: 10px 0 18px; display: flex; justify-content: center; }
+
+/* =========================
+   Timeline
+   ========================= */
+
+.timeline {
+  list-style: none;          /* 番号を消す */
+  position: relative;
+  margin: 8px 0 0;
+  padding-left: 80px;        /* 左の大バブル分の余白 */
+  max-width: 960px;
+  margin-inline: auto;
+}
+
+/* 破線の縦ライン（記憶した値） */
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 32px;                /* バブル中心 */
+  top: 20px;
+  bottom: 20px;
+  width: 5px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--color-gray-300, #d1d5db) 0,
+    var(--color-gray-300, #d1d5db) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  background-repeat: repeat-y;
+  background-position: center top;
+}
+
+/* 1行（カード） */
+.item { position: relative; margin: 16px 0; }
+
+/* バブル（カード高さ＝直径）— 記憶した値 */
+.marker {
+  position: absolute;
+  left: -45px;               /* カードからはみ出し */
+  top: 15px;
+  bottom: 15px;              /* 行＝カード高さ＝直径 */
+  transform: translateX(-50%);
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  z-index: 1;
+
+  /* 既定の縁取りは白（done/locked用） */
+  box-shadow: 0 0 0 3px #fff;
+  border-radius: 9999px;
+  transition: transform .15s ease, box-shadow .15s ease;
+
+  /* グラフィックの描画安定化 */
+  transform: translateX(-50%) translateZ(0);
+  -webkit-transform: translateX(-50%) translateZ(0);
+  backface-visibility: hidden;
+}
+.markerSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* 状態別：バブル背景を同色で塗って縁のアーティファクトを隠す */
+.done    .marker { background-color: #22c55e; } /* green-500 */
+.current .marker { background-color: #f59e0b; } /* amber-500 */
+.locked  .marker { background-color: #e5e7eb; } /* gray-200 */
+
+/* current だけ縁取りをオレンジに */
+.current .marker { box-shadow: 0 0 0 3px var(--color-primary-100, #FFF6E9); }
+
+/* バブルをボタン化（done/current） */
+.markerButton { cursor: pointer; outline: none; }
+.markerButton:focus-visible {
+  box-shadow: 0 0 0 4px #fff, 0 0 0 6px rgba(245,158,11,.5);
+}
+
+/* カード hover と連動して、バブルも軽く拡大＆縁強調 */
+.item:hover .marker       { transform: translateX(-50%) scale(1.04) translateZ(0); box-shadow: 0 0 0 4px #fff; }
+.current:hover .marker    { box-shadow: 0 0 0 4px var(--color-primary-100, #FFF6E9); }
+
+/* レッスンカード（厚め） */
+.lessonCard {
+  width: 100%;
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  min-height: 72px;
+  padding: 18px 20px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid var(--color-gray-200, #e5e7eb);
+  color: inherit;
+  transition: box-shadow .12s ease, border-color .12s ease, transform .12s ease;
+  text-decoration: none;      /* Next/Link下線抑止 */
+}
+.lessonCard:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,.06);
+  border-color: var(--color-gray-300, #d1d5db);
+  transform: translateY(-1px);
+}
+
+/* タイトル（左側リンク） */
+.lessonMain  { text-decoration: none; color: inherit; flex: 1 1 auto; margin-right: 12px; }
+.lessonTitle { font-weight: 700; color: var(--color-gray-900, #111827); line-height: 1.5; }
+
+/* 右側アクション（PCでは表示、モバイルは非表示） */
+.lessonAction { display: inline-block; }
+
+/* リンクの下線を全状態で完全OFF（オレンジの下線対策） */
+.lessonCard a,
+.lessonCard a:hover,
+.lessonCard a:focus,
+.lessonMain,
+.lessonMain:hover,
+.lessonMain:focus {
+  text-decoration: none !important;
+  border-bottom: 0 !important;
+}
+
+/* ステータス別の雰囲気（カード側） */
+.done    .lessonCard { background: #F9FFFB; border-color: #d1fae5; }
+.current .lessonCard { background: #FFF9F0; border-color: #ffd9a3; }
+.locked  .lessonCard { background: #F9FAFB; border-color: var(--color-gray-200, #e5e7eb); }
+
+/* ロック時は押せない風に */
+.disabled { pointer-events: none; color: var(--color-gray-500, #6b7280); border-style: dashed; }
+
+/* =========================
+   Responsive (Mobile)
+   ========================= */
+@media (max-width: 768px) {
+  .highlight   { margin: 8px 0 18px; padding: 14px; }
+  .progressRow { grid-template-columns: 90px 1fr; }
+  .lessonCard  { min-height: 80px; padding: 14px 16px; } /* 高さを統一 */
+
+  .lessonTitle {
+    display: -webkit-box;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .timeline        { padding-left: 80px; }
+  .timeline::before{ left: 32px; top: 20px; bottom: 20px; width: 5px; }
+  .marker          { left: -45px; top: 10px; bottom: 10px; }
+
+  .lessonAction { display: none !important; }
+}

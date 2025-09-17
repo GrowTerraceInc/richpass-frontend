@@ -1,0 +1,63 @@
+.nav {
+  /* ↑ 上(サイトヘッダーとの間) / ↓ 下(タイトルとの間) をそれぞれ広げました */
+  margin: 16px 0 16px;
+  color: var(--color-gray-700);
+  font-size: 14px;
+}
+
+/* 1行固定・横幅超過は最後の要素だけで吸収する（仕様はそのまま） */
+.ol {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  flex-wrap: nowrap;
+  overflow: hidden;         /* はみ出しは隠す（最後の要素を…で省略） */
+}
+
+.li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;           /* 各要素は基本固定幅 */
+}
+.li:last-child {
+  flex: 1 1 auto;           /* ★ 最後だけ可変 */
+  min-width: 0;             /* ★ 省略（ellipsis）可能に */
+}
+
+/* テキストは1行で、省略記号対応 */
+.link,
+.current {
+  white-space: nowrap;
+}
+
+/* 最後の要素だけ省略記号に */
+.li:last-child .link,
+.li:last-child .current {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.link {
+  color: var(--color-primary-600, #E67E22);
+  text-decoration: none;
+}
+.link:hover { text-decoration: underline; }
+
+.current { color: var(--color-gray-600); }
+.sep     { color: var(--color-gray-400); }
+
+/* デスクトップは余白を少しだけ広げ、末尾の省略上限も少しゆるめる */
+@media (min-width: 768px) {
+  .nav { margin: 20px 0 20px; }   /* ← PCではさらにゆとりを */
+  .li:last-child .link,
+  .li:last-child .current {
+    max-width: 32rem;             /* 長すぎるタイトルだけ省略 */
+  }
+}

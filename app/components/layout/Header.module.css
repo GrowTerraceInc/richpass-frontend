@@ -1,0 +1,153 @@
+.header {
+  /* 追加: 上部固定（スクロールしても常に先頭） */
+  position: sticky;
+  top: 0;
+  z-index: 1100;            /* 下部固定nav(z-index:1000)より上に */
+  background: #fff;
+
+  padding: 15px;
+  border-bottom: 1px solid #eeeeee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logoImage {
+  height: 20px;
+  width: auto;
+  display: block;
+}
+@media (min-width: 768px) {
+  .logoImage { height: 30px; }
+}
+
+/* ナビ（PC専用） */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.navLink {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+.navLink:hover { color: #f39c12; }
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.bellBtn {
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+.bellBtn:hover { background-color: #f6f6f6; }
+.bellIcon {
+  display: block;
+  width: 22px;
+  height: 22px;
+  fill: #555;
+}
+
+.avatarWrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  outline: none;
+}
+.avatar { border-radius: 50%; object-fit: cover; }
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  width: 160px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+.userName { font-weight: 600; margin: 0; }
+.userLevel { font-size: 14px; color: #666; margin: 4px 0 0 0; }
+
+.authButtons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ===== モバイル用タブメニュー ===== */
+.bottomNav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-top: 1px solid #ddd;
+  background: #fff;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  z-index: 1000;
+}
+.bottomNavItem {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  text-decoration: none;
+}
+.bottomNavItem:hover { color: #f39c12; }
+
+/* 表示切替 */
+.desktopOnly { display: none; }
+.mobileOnly { display: flex; }
+@media (min-width: 768px) {
+  .desktopOnly { display: flex; }
+  .mobileOnly { display: none; }
+}
+
+/* === iPhone SE 等: 390px 以下での折り返し回避調整 === */
+@media (max-width: 390px) {
+  .header { padding: 10px; }
+  .logoImage { height: 18px; }
+
+  .authButtons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+  .authButtons :global(a),
+  .authButtons :global(button) { white-space: nowrap; }
+  .authButtons :global(button) {
+    font-size: 12px;
+    padding: 6px 10px;
+    line-height: 1.1;
+  }
+}

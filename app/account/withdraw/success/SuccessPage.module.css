@@ -1,0 +1,15 @@
+.wrapper {
+  text-align: center;
+  margin: 40px auto 0;
+  max-width: 720px;
+}
+.icon {
+  width: 88px;
+  height: 88px;
+  stroke: var(--color-success);
+  margin: 0 auto 12px;
+}
+.subtext {
+  color: var(--color-gray-600);
+  margin: 8px 0 24px;
+}

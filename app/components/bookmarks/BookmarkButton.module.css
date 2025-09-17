@@ -1,0 +1,48 @@
+/* 共通（PC基準） */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 9999px;
+  border: 1px solid var(--color-gray-300, #d1d5db);
+  background: #fff;
+  color: var(--color-gray-700, #374151);
+  cursor: pointer;
+  transition:
+    background .15s ease,
+    border-color .15s ease,
+    color .15s ease,
+    transform .05s ease,
+    box-shadow .15s ease;
+}
+.btn:hover { background: #f9fafb; border-color: var(--color-gray-300, #d1d5db); }
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: .6; cursor: progress; }
+
+.on {
+  background: #fff7ed; /* orange-50 */
+  border-color: var(--color-primary-300, #ffd9a3);
+  color: var(--color-primary-700, #c96b00);
+  box-shadow: 0 0 0 2px rgba(255, 217, 163, .35);
+}
+
+.icon { width: 18px; height: 18px; display: block; }
+
+.text { font-size: 12px; font-weight: 700; }
+
+/* ===== モバイル最適化（アイコンのみ & 少し大きめ） ===== */
+@media (max-width: 640px) {
+  .btn {
+    padding: 6px;              /* コンパクトに */
+    gap: 0;                    /* 余白不要（テキスト非表示のため） */
+    border-radius: 9999px;     /* まるっと */
+  }
+  .icon {
+    width: 22px;               /* アイコンをやや大きく */
+    height: 22px;
+  }
+  .text {
+    display: none;             /* モバイルはアイコンのみ表示 */
+  }
+}

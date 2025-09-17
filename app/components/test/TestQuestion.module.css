@@ -1,0 +1,191 @@
+/* ルート */
+.wrap { box-sizing: border-box; }
+
+/* 上部の簡易メタ（Runnerでは通常 showMeta=false） */
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 8px;
+}
+.qLabel { font-size: 12px; color: var(--color-gray-600, #4b5563); }
+.progressTrack {
+  width: 100%;
+  height: 6px;
+  margin-left: 12px;
+  background: var(--color-gray-200, #e5e7eb);
+  border-radius: 9999px;
+}
+
+/* 設問タイトル */
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-gray-900, #111827);
+  line-height: 1.7;
+  margin: 0 0 16px;
+}
+
+/* 選択肢 */
+.fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-auto-flow: row;
+  row-gap: 12px;
+}
+
+/* ラジオ風の丸を確実に非表示 */
+.fieldset input[type="radio"] { display: none !important; }
+.fieldset label::before { content: none !important; }
+
+/* カード高さをそろえる + 交互状態 */
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  min-height: 56px;
+  padding: 10px 14px;
+  border: 1px solid var(--color-gray-300, #d1d5db);
+  border-radius: 10px;
+  background: #fff;
+
+  cursor: pointer;
+  transition: box-shadow .12s ease, border-color .12s ease, background-color .12s ease, transform .06s ease;
+}
+.choice:hover {
+  box-shadow: 0 6px 16px rgba(0,0,0,.05);
+  border-color: var(--color-gray-300, #d1d5db);
+}
+
+/* 選択中（提出前） */
+.selected {
+  border-color: var(--color-primary-300, #FFD9A3);
+  background: var(--color-primary-50, #FFF8F0);
+}
+
+/* 左側の (A)(B)… */
+.choiceKey {
+  width: 44px;
+  flex: 0 0 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-gray-700, #374151);
+  font-weight: 700;
+}
+
+/* テキスト */
+.choiceText {
+  flex: 1 1 auto;
+  color: var(--color-gray-900, #111827);
+  line-height: 1.6;
+}
+
+/* 正誤状態（提出後のみ適用） */
+.correct { border-color: #86efac; background: #f0fdf4; }
+.wrong   { border-color: #fecaca; background: #fef2f2; }
+.mark { margin-left: 8px; font-weight: 700; color: var(--color-gray-600, #4b5563); }
+
+/* 解説 */
+.explanation {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--color-gray-50, #f9fafb);
+  color: var(--color-gray-800, #1f2937);
+}
+.explanation > strong { display: inline-block; margin-right: 8px; }
+
+/* フッター（ボタン領域） */
+.footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;          /* 余白も少し増やす */
+}
+
+/* プライマリボタン（回答する／結果を見る／次の問題へ 共通） */
+/* ★ ひと回り大きく（フォント・高さ・横幅） */
+.primaryBtn {
+  appearance: none;
+  border: 0;
+  border-radius: 9999px;
+
+  padding: 14px 28px;        /* ← 12x24 → 14x28 */
+  min-height: 52px;          /* target サイズUP（44px以上推奨） */
+  min-width: 220px;          /* 横幅のベースを少し確保 */
+  font-size: 16px;           /* ← 文字も一段階大きく */
+  line-height: 1;            /* 縦センタリングの安定化 */
+
+  background: var(--color-primary-500, #f59e0b);
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: .01em;
+  cursor: pointer;
+
+  transition: transform .08s ease, box-shadow .12s ease, opacity .12s ease;
+}
+.primaryBtn:hover {
+  box-shadow: 0 12px 28px rgba(0,0,0,.14);  /* 影も少し強めに */
+  transform: translateY(-1px);
+}
+.primaryBtn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ===== 中央オーバーレイ（回答後にポン→フェードアウト） ===== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 50;
+  pointer-events: none;           /* クリックをブロックしない */
+}
+.overlayCard {
+  min-width: 220px;
+  padding: 18px 28px;
+  border-radius: 9999px;
+  font-weight: 900;
+  font-size: 28px;
+  color: #fff;
+  text-align: center;
+  letter-spacing: .02em;
+  box-shadow: 0 20px 60px rgba(0,0,0,.18);
+
+  /* ポンッ → ふわっと消える */
+  animation: overlayPop 1.1s cubic-bezier(.2,.7,.2,1) both;
+}
+.overlayOk { background: #16a34a; } /* green-600 */
+.overlayNg { background: #dc2626; } /* red-600 */
+
+@keyframes overlayPop {
+  0%   { opacity: 0; transform: scale(.92); }
+  20%  { opacity: 1; transform: scale(1.08); }
+  60%  { opacity: 1; transform: scale(1.00); }
+  100% { opacity: 0; transform: scale(.98); }
+}
+
+/* モバイル */
+@media (max-width: 768px) {
+  .title { font-size: 18px; line-height: 1.65; margin-bottom: 14px; }
+
+  .choice { min-height: 54px; padding: 10px 12px; }
+  .choiceKey { width: 40px; flex-basis: 40px; }
+  .footer { margin-top: 20px; }
+
+  /* ★ モバイルでも押しやすく（さらに少し大きめに） */
+  .primaryBtn {
+    padding: 14px 22px;
+    min-height: 50px;
+    min-width: 240px;        /* 親中央寄せでちょうど良い存在感に */
+    font-size: 15px;
+  }
+
+  .overlayCard { font-size: 24px; padding: 16px 22px; min-width: 200px; }
+}

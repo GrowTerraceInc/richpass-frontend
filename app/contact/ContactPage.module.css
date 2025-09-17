@@ -1,0 +1,138 @@
+.header {
+  text-align: center;
+  margin: 32px 0 40px;
+}
+
+.title {
+  font-size: var(--h2-size);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: #0f172a;
+  margin: 0;
+}
+
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding-bottom: 48px; /* フッターとの距離 */
+}
+
+.card {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-100);
+  border-radius: 12px;
+  padding: 16px;
+  display: grid;
+  gap: 16px;
+}
+
+.row {
+  display: grid;
+  gap: 6px;
+}
+
+.label {
+  font-weight: 700;
+  color: var(--color-gray-900);
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--color-gray-200);
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+  background: #fff;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 2px rgba(243, 156, 18, 0.25);
+}
+
+.errorText {
+  color: var(--color-error);
+  font-size: 13px;
+}
+
+.counter {
+  color: var(--color-gray-600);
+  font-size: 12px;
+  text-align: right;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.success {
+  background: var(--color-primary-100);
+  border: 1px solid var(--color-primary-600);
+  color: var(--color-gray-900);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* ===== 確認ステップ ===== */
+.confirmTitle {
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+/* キー:バリューの一覧 */
+.kv {
+  display: grid;
+  gap: 10px;
+}
+
+/* ★ ベースラインを揃える（デスクトップ時は2カラム） */
+.kvRow {
+  display: grid;
+  gap: 8px;
+  align-items: baseline;          /* ← ここがポイント */
+}
+.kvRow > * {
+  align-self: baseline;           /* ブラウザ差をならす */
+}
+
+@media (min-width: 640px) {
+  .kvRow {
+    grid-template-columns: 160px 1fr;
+  }
+}
+
+/* ラベルと値で同じ line-height にして視覚的な位置を一致させる */
+.kvLabel {
+  color: var(--color-gray-600);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.7;
+}
+.kvValue {
+  color: var(--color-gray-900);
+  white-space: pre-wrap;
+  line-height: 1.7;               /* ← ラベルと合わせる */
+}
+
+.badgeType {
+  display: inline-block;
+  border: 1px solid var(--color-gray-200);
+  background: var(--color-gray-50);
+  color: var(--color-gray-900);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 9999px;
+}

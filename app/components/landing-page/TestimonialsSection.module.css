@@ -1,0 +1,48 @@
+/* .testimonialsSection / .inner は削除（空ルール回避） */
+
+.heading {
+  text-align: center;
+  font-size: clamp(22px, 6vw, 32px);
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 32px;
+}
+
+.grid { display: grid; grid-template-columns: 1fr; row-gap: 28px; }
+
+.item {
+  display: grid;
+  grid-template-columns: 38% 1fr;
+  column-gap: 14px;
+  align-items: start;
+  padding: 20px 0;
+  border-top: 1px solid #e5e7eb;
+}
+.item:first-child { border-top: none; }
+
+.reverse { grid-template-columns: 1fr 38%; }
+.reverse .photo { order: 2; }
+.reverse .body  { order: 1; }
+
+.photo {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 14px;
+  overflow: hidden;
+}
+.photoImg { object-fit: cover; display: block; }
+
+.body { text-align: left; display: flex; flex-direction: column; justify-content: center; }
+.quote { font-size: clamp(15px, 4.2vw, 18px); line-height: 1.9; color: #334155; margin: 0 0 12px; }
+.role  { font-size: clamp(14px, 3.8vw, 18px); font-weight: 800; color: #111827; text-align: center; }
+
+@media (min-width: 768px) {
+  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+  .item { border-top: none; padding: 0; grid-template-columns: 1fr 2fr; column-gap: 16px; }
+  .reverse { grid-template-columns: 1fr 2fr; }
+  .reverse .photo { order: 0; }
+  .reverse .body  { order: 0; }
+  .photo { border-radius: 12px; }
+  .quote { font-size: clamp(13px, 1.05vw, 15px); line-height: 1.7; margin-bottom: 8px; }
+  .role  { text-align: left; font-size: 14px; }
+}

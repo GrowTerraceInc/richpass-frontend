@@ -1,0 +1,97 @@
+.inner { text-align: center; }
+
+/* ===== アバター（大きめ・オレンジ縁＋影） ===== */
+.avatarWrap {
+  position: relative;
+  width: clamp(96px, 12vw, 128px);
+  height: clamp(96px, 12vw, 128px);
+  border-radius: 50%;
+  border: 6px solid #f39c12;
+  padding: 6px;
+  background: #fff;
+  box-shadow: 0 12px 26px rgba(17,24,39,.14);
+  overflow: hidden;
+}
+.avatarImg { object-fit: cover; border-radius: 50%; }
+
+/* 行の並びとオフセット */
+.rowTop,
+.rowBottom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(32px, 7vw, 96px);
+}
+.rowTop   { margin-bottom: clamp(16px, 2.8vw, 30px); }
+.rowBottom{ margin-top:    clamp(16px, 2.8vw, 30px);
+            margin-bottom: clamp(22px, 3.2vw, 36px); }
+
+.centerTop    { transform: translateY(-14px); }
+.centerBottom { transform: translateY(14px); }
+
+/* ===== タイトル / リード / チップ ===== */
+.title {
+  font-size: clamp(28px, 4.4vw, 42px);
+  font-weight: 900;
+  color: #111827;
+  line-height: 1.35;
+  margin: clamp(12px, 1.8vw, 20px) 0;
+}
+
+/* 改行制御 */
+.brMdUp   { display: none; }              /* MD+ でのみ改行 */
+.brSmOnly { display: inline; }            /* SP のみ改行 */
+@media (min-width: 768px) {
+  .brMdUp   { display: inline; }
+  .brSmOnly { display: none; }
+}
+
+.lead {
+  color: #4b5563;
+  font-size: 15px;
+  line-height: 1.9;
+  margin: 0 0 clamp(14px, 2.2vw, 20px);
+  text-wrap: balance;
+}
+
+/* チップ */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 12px 0 24px;
+  padding: 0;
+  list-style: none;
+}
+.chips li {
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  color: #334155;
+}
+
+/* CTA */
+.ctaArea { margin-top: 14px; }
+.note    { margin: 10px 0 0; font-size: 12px; color: #6b7280; }
+
+/* 実績数値（中央に“きゅっ”と） */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, clamp(90px, 24vw, 180px));
+  justify-content: center;
+  gap: clamp(10px, 2.2vw, 18px);
+  margin-top: clamp(24px, 3.4vw, 36px);
+  text-align: center;
+}
+.statItem { padding: 0; }
+.statValue {
+  font-size: clamp(22px, 3.6vw, 30px);
+  font-weight: 900;
+  color: var(--color-primary-500);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.statLabel { font-size: 12px; color: #6b7280; line-height: 1.6; }

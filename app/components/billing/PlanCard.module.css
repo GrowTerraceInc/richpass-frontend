@@ -1,0 +1,71 @@
+.card {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-100);
+  border-radius: 12px;
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.cardCurrent {
+  background: var(--color-primary-100);   /* 薄いオレンジ */
+  border-color: var(--color-primary-600); /* 枠も少し強めに */
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.name {
+  font-weight: 800;
+  color: var(--color-gray-900);
+  font-size: 18px;
+}
+
+/* 現在のプランの強調バッジ（濃いオレンジ×白抜き） */
+.badgeCurrent {
+  border: 1px solid var(--color-primary-600);
+  border-radius: 9999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;                         /* 白文字 */
+  background: var(--color-primary-600); /* 濃いオレンジ */
+}
+
+.priceRow {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  color: var(--color-gray-900);
+}
+
+/* 月額だけを大きめに */
+.price {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+@media (max-width: 640px) {
+  .price { font-size: 24px; }
+}
+
+/* リストはデフォルトの●で表示（手動の「・」は使わない） */
+.features {
+  margin-top: 4px;
+  color: var(--color-gray-700);
+  font-size: 14px;
+  line-height: 1.7;
+  list-style: disc;
+  padding-left: 1.25rem;   /* インデント */
+  margin: 0;               /* 余白の暴れを抑える */
+}
+
+.actions {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
