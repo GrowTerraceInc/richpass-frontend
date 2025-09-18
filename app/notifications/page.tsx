@@ -1,39 +1,36 @@
-import Breadcrumbs from "@/app/components/breadcrumbs/Breadcrumbs";
-import NotificationListItem from "@/app/components/notifications/NotificationListItem";
-import styles from "./NotificationsPage.module.css";
-import { loadNotifications } from "@/app/lib/notifications";
+'use client';
 
-export default async function NotificationsPage() {
-  const items = await loadNotifications();
+import { useEffect, useState } from 'react';
+const API = process.env.NEXT_PUBLIC_API_ORIGIN!;
+
+type Notification = {
+  id: string; title: string; body_md: string; type: string;
+  is_pinned: 0|1; link_url?: string|null; published_at: string;
+};
+
+export default function Page() {
+  const [items, setItems] = useState<Notification[]>([]);
+  const [err, setErr] = useState<string|null>(null);
+
+  useEffect(() => {
+    fetch(`${API}/api/notifications`, { credentials:'include', headers:{Accept:'application/json'} })
+      .then(r => r.json()).then(d => setItems(d.items ?? []))
+      .catch(e => setErr(String(e)));
+  }, []);
 
   return (
-    <main className="container">
-      <div className="header">
-        <Breadcrumbs
-          items={[
-            { label: "マイページ", href: "/mypage" },
-            { label: "お知らせ", href: "/notifications" },
-          ]}
-        />
-      </div>
-
-      <div className={styles.header}>
-        <h1 className={styles.title}>お知らせ一覧</h1>
-      </div>
-
-      <div>
-        {items.map((n) => (
-          <NotificationListItem
-            key={n.id}
-            title={n.title}
-            createdAt={n.publishedAt}
-            icon={n.icon ?? "info"}
-            type={n.type}
-            pinned={n.isPinned}
-            href={`/notifications/${n.id}`}
-          />
+    <main style={{ padding:24, fontFamily:'system-ui' }}>
+      <h1>お知らせ</h1>
+      {err && <p style={{color:'red'}}>{err}</p>}
+      <ul style={{display:'grid', gap:12, padding:0, listStyle:'none'}}>
+        {items.map(n => (
+          <li key={n.id} style={{border:'1px solid #ddd', borderRadius:12, padding:12}}>
+            {n.is_pinned ? <span style={{fontSize:12, color:'#b50', marginRight:8}}>📌ピン留め</span> : null}
+            <a href={`/notifications/${n.id}`} style={{fontSize:16, textDecoration:'underline'}}>{n.title}</a>
+            <div style={{fontSize:12, color:'#666'}}>{new Date(n.published_at).toLocaleString()}</div>
+          </li>
         ))}
-      </div>
+      </ul>
     </main>
   );
 }
