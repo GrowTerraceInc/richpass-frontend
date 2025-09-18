@@ -5,6 +5,8 @@ import { csrfFetch } from '@/app/lib/csrfFetch';
 
 const API = process.env.NEXT_PUBLIC_API_ORIGIN!;
 
+type SubscribeResponse = { url?: string };
+
 export default function SubscribeAction() {
   const [loading, setLoading] = useState(false);
   const [log, setLog] = useState<string | null>(null);
@@ -16,7 +18,8 @@ export default function SubscribeAction() {
       const res = await csrfFetch(`${API}/api/subscribe`, { method: 'POST' });
       const data: unknown = await res.json().catch(() => ({} as unknown));
       setLog(JSON.stringify({ status: res.status, data }, null, 2));
-      const url = (data as { url?: unknown })?.url;
+
+      const url = (data as SubscribeResponse)?.url;
       if (res.ok && typeof url === 'string') {
         window.location.href = url; // Stripe Checkoutへ
       } else if (res.status === 401) {
@@ -24,8 +27,9 @@ export default function SubscribeAction() {
       } else {
         alert('購読開始に失敗しました。時間をおいて再度お試しください。');
       }
-    } catch (e: any) {
-      setLog(String(e?.message ?? e));
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      setLog(msg);
       alert('エラーが発生しました。');
     } finally {
       setLoading(false);
