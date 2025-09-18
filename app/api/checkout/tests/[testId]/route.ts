@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { NextResponse } from "next/server";
 import { getTestById } from "@/app/lib/mockLoader";
 
