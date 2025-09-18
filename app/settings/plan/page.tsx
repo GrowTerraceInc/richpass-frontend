@@ -1,3 +1,4 @@
+import SubscribeAction from './components/SubscribeAction';
 import Breadcrumbs from "@/app/components/breadcrumbs/Breadcrumbs";
 import LinkButton from "@/app/components/ui/LinkButton";
 import styles from "./PlanPage.module.css";
@@ -85,6 +86,8 @@ export default async function PlanPage() {
           ※ 現在はモック表示です。Stripe連携後に「プランを変更」からチェックアウト/ポータルへ遷移します。
         </div>
       </div>
-    </main>
+    
+  <div style={{marginTop:16}}><SubscribeAction /></div>
+</main>
   );
 }
