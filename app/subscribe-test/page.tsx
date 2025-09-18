@@ -10,11 +10,13 @@ function getXsrfFromCookie() {
 }
 
 async function ensureCsrf() {
+  // 取得の成否をログする
   if (!getXsrfFromCookie()) {
-    await fetch(`${API}/sanctum/csrf-cookie`, {
+    const res = await fetch(`${API}/sanctum/csrf-cookie`, {
       credentials: 'include',
       headers: { Accept: 'application/json' },
     });
+    if (!res.ok) throw new Error(`csrf-cookie status ${res.status}`);
   }
 }
 
@@ -26,49 +28,66 @@ export default function Page() {
   const append = (x: unknown) =>
     setLog((p) => p + '\n' + JSON.stringify(x, null, 2));
 
-  // CSRF付きログイン
   async function login() {
-    await ensureCsrf();
-    const xsrf = getXsrfFromCookie();
-    const res = await fetch(`${API}/api/auth/login`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'X-XSRF-TOKEN': xsrf,
-      },
-      body: JSON.stringify({ email, password }),
-    });
-    const data: unknown = await res.json().catch(() => ({} as unknown));
-    append({ login_status: res.status, data });
+    setLog('ログイン開始…');
+    try {
+      await ensureCsrf();
+      const xsrf = getXsrfFromCookie();
+      if (!xsrf) throw new Error('XSRF-TOKEN not found in cookie');
+      const res = await fetch(`${API}/api/auth/login`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'X-XSRF-TOKEN': xsrf,
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      const text = await res.text();
+      let data: unknown = {};
+      try { data = JSON.parse(text); } catch { data = { raw: text }; }
+      append({ login_status: res.status, data });
+    } catch (e: unknown) {
+      append({ login_error: e instanceof Error ? e.message : String(e) });
+    }
   }
 
   async function me() {
-    const res = await fetch(`${API}/api/me`, {
-      credentials: 'include',
-      headers: { Accept: 'application/json' },
-    });
-    const data: unknown = await res.json().catch(() => ({} as unknown));
-    append({ me_status: res.status, data });
+    setLog('Me確認…');
+    try {
+      const res = await fetch(`${API}/api/me`, {
+        credentials: 'include',
+        headers: { Accept: 'application/json' },
+      });
+      const text = await res.text();
+      let data: unknown = {};
+      try { data = JSON.parse(text); } catch { data = { raw: text }; }
+      append({ me_status: res.status, data });
+    } catch (e: unknown) {
+      append({ me_error: e instanceof Error ? e.message : String(e) });
+    }
   }
 
-  // CSRF付き Subscribe
   async function subscribe() {
-    await ensureCsrf();
-    const xsrf = getXsrfFromCookie();
-    const res = await fetch(`${API}/api/subscribe`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: { Accept: 'application/json', 'X-XSRF-TOKEN': xsrf },
-    });
-    const data: unknown = await res.json().catch(() => ({} as unknown));
-    const url = (data as { url?: unknown })?.url;
-    append({ subscribe_status: res.status, data });
-    if (res.ok && typeof url === 'string') {
-      window.location.href = url;
-    } else if (res.status === 401) {
-      append({ hint: '未ログインです。まず「ログイン」を押してください。' });
+    setLog('購読開始処理…');
+    try {
+      await ensureCsrf();
+      const xsrf = getXsrfFromCookie();
+      if (!xsrf) throw new Error('XSRF-TOKEN not found in cookie');
+      const res = await fetch(`${API}/api/subscribe`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { Accept: 'application/json', 'X-XSRF-TOKEN': xsrf },
+      });
+      const text = await res.text();
+      let data: unknown = {};
+      try { data = JSON.parse(text); } catch { data = { raw: text }; }
+      append({ subscribe_status: res.status, data });
+      const url = (data as { url?: string }).url;
+      if (res.ok && typeof url === 'string') window.location.href = url;
+    } catch (e: unknown) {
+      append({ subscribe_error: e instanceof Error ? e.message : String(e) });
     }
   }
 
