@@ -1,4 +1,3 @@
-// app/signup/components/RegistrationForm.tsx
 "use client";
 
 import { useMemo, useState } from "react";
@@ -6,19 +5,59 @@ import Link from "next/link";
 import styles from "./RegistrationForm.module.css";
 import Button from "@/app/components/ui/Button";
 
+/** 0〜4 の強度スコア */
+function scorePassword(pw: string): number {
+  let score = 0;
+  if (pw.length >= 8) score++;
+  if (/[a-z]/.test(pw) && /[A-Z]/.test(pw)) score++;
+  if (/\d/.test(pw)) score++;
+  if (/[^a-zA-Z0-9]/.test(pw)) score++;
+  return Math.max(0, Math.min(4, score));
+}
+
+/** サインアップ用のポリシー（8文字以上／4要素中3種以上） */
+function meetsPolicy(pw: string): string | null {
+  if (pw.length < 8) return "8文字以上にしてください。";
+  const categories =
+    (/[a-z]/.test(pw) ? 1 : 0) +  // 小文字
+    (/[A-Z]/.test(pw) ? 1 : 0) +  // 大文字
+    (/\d/.test(pw) ? 1 : 0) +     // 数字
+    (/[^a-zA-Z0-9]/.test(pw) ? 1 : 0); // 記号
+  if (categories < 3) return "大文字・小文字・数字・記号のうち3種類以上を含めてください。";
+  return null;
+}
+
 export default function RegistrationForm() {
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
+
   const [pw, setPw] = useState("");
   const [pw2, setPw2] = useState("");
+
+  // 触れたかどうか（初期表示で赤エラーを出さない）
+  const [touched, setTouched] = useState({ pw: false, pw2: false });
+
   const [agree, setAgree] = useState(false);
 
   const emailOk = useMemo(() => /\S+@\S+\.\S+/.test(email.trim()), [email]);
-  const passwordOk = useMemo(() => pw.length >= 8, [pw]);
-  const matchOk = useMemo(() => pw === pw2 && pw2.length > 0, [pw, pw2]);
   const nicknameOk = useMemo(() => nickname.trim().length > 0, [nickname]);
 
-  const canSubmit = nicknameOk && emailOk && passwordOk && matchOk && agree;
+  const pwStrength = useMemo(() => scorePassword(pw), [pw]);
+  const policyErrorRaw = useMemo(() => meetsPolicy(pw), [pw]);
+  const policyError =
+    touched.pw && pw.length > 0 ? policyErrorRaw ?? undefined : undefined;
+
+  const confirmErrorRaw =
+    pw2.length > 0 && pw !== pw2 ? "パスワードが一致しません。" : "";
+  const confirmError =
+    touched.pw2 && pw2.length > 0 ? confirmErrorRaw || undefined : undefined;
+
+  const canSubmit =
+    nicknameOk &&
+    emailOk &&
+    !policyErrorRaw &&
+    confirmErrorRaw === "" &&
+    agree;
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,7 +102,6 @@ export default function RegistrationForm() {
               id="email"
               name="email"
               type="email"
-              placeholder=""
               className={styles.input}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -82,16 +120,25 @@ export default function RegistrationForm() {
               id="password"
               name="password"
               type="password"
-              placeholder="8文字以上"
+              placeholder="8文字以上／大文字・小文字・数字・記号のうち3種類以上を推奨"
               className={styles.input}
               value={pw}
               onChange={(e) => setPw(e.target.value)}
+              onBlur={() => setTouched((t) => ({ ...t, pw: true }))}
               autoComplete="new-password"
               required
               minLength={8}
-              aria-invalid={!passwordOk && pw.length > 0}
+              aria-invalid={!!policyError}
             />
-            <p className={styles.hint}>英数字8文字以上を推奨</p>
+            {/* 強度メーター（パスワード変更画面と同仕様） */}
+            <div className={`${styles.meter} ${styles[`meter--${Math.max(1, pwStrength)}`]}`}>
+              <div
+                className={styles.meterFill}
+                style={{ width: `${(pwStrength / 4) * 100}%` }}
+                aria-hidden="true"
+              />
+            </div>
+            {policyError && <div className={styles.error}>{policyError}</div>}
           </div>
 
           {/* Password confirm */}
@@ -103,14 +150,15 @@ export default function RegistrationForm() {
               id="password2"
               name="password2"
               type="password"
-              placeholder=""
               className={styles.input}
               value={pw2}
               onChange={(e) => setPw2(e.target.value)}
+              onBlur={() => setTouched((t) => ({ ...t, pw2: true }))}
               autoComplete="new-password"
               required
-              aria-invalid={!matchOk && pw2.length > 0}
+              aria-invalid={!!confirmError}
             />
+            {confirmError && <div className={styles.error}>{confirmError}</div>}
           </div>
 
           {/* Agreements */}

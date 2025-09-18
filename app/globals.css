@@ -150,3 +150,18 @@ a:hover {
   color: #111827;
   margin: 0 0 10px;
 }
+
+/* タブバー高さ（デザインに合わせて調整可） */
+:root {
+  --tabbar-h: 72px;
+}
+
+/* タブが出ているページだけ、メイン下に余白＆フッター非表示（モバイルのみ） */
+@media (max-width: 768px) {
+  body.has-tabbar .mainContent {
+    padding-bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+  }
+  body.has-tabbar .siteFooterSlot {
+    display: none;
+  }
+}

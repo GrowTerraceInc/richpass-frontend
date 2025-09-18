@@ -1,0 +1,112 @@
+.header {
+  text-align: center;
+  margin: 32px 0 40px;
+}
+.title {
+  font-size: var(--h2-size);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: #0f172a;
+  margin: 0;
+}
+
+/* プロフィールヘッダー */
+.profile {
+  text-align: center;
+  margin: 0 auto 24px;
+}
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 9999px;
+  object-fit: cover;
+  background: var(--color-gray-100);
+  border: 1px solid var(--color-gray-200);
+  margin: 0 auto 12px;
+}
+.name {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-gray-900);
+  margin: 0 0 6px;
+}
+.email {
+  color: var(--color-gray-600);
+  font-size: 14px;
+  margin: 0 0 12px;
+}
+.editBtn {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  border: 1px solid var(--color-gray-200);
+  background: #fff;
+  color: var(--color-gray-900);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+/* メニューリスト */
+.menuWrap {
+  max-width: 780px;
+  margin: 24px auto 0;
+  padding-bottom: 64px;   /* ← フッターとの距離を確保 */
+}
+.menu {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-100);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.menuItem {
+  display: block;
+  padding: 16px 18px;
+  color: var(--color-gray-900);
+  text-decoration: none;            /* 常に下線無し */
+  border-top: 1px solid var(--color-gray-100);
+}
+.menuItem:hover {
+  text-decoration: none;            /* ホバーでも下線無し */
+}
+.menuItem:first-child { border-top: none; }
+
+/* 先頭の > 表示 */
+.menuItem::before {
+  content: "＞ ";
+  color: var(--color-gray-600);
+  margin-right: 6px;
+}
+
+/* ログアウトだけ赤系 */
+.danger {
+  color: var(--color-error);
+  font-weight: 700;
+}
+
+/* 退会ボックス */
+.withdrawBox {
+  margin: 24px auto 0;
+  max-width: 780px;
+  background: var(--color-gray-50);
+  border: 1px solid var(--color-gray-200);
+  border-radius: 8px;
+  text-align: center;
+  padding: 16px;
+}
+.withdrawLink {
+  display: inline-block;
+  color: var(--color-gray-900);
+  text-decoration: none;
+  font-weight: 700;
+}
+.withdrawLink:hover {
+  text-decoration: none;
+}
+.withdrawLink::before {
+  content: "＞ ";
+  color: var(--color-gray-600);
+  margin-right: 6px;
+}
+
+/* 最下部スペーサー（保険） */
+.tail { height: 16px; }

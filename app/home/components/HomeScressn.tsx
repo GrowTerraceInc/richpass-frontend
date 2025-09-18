@@ -24,8 +24,8 @@ const studyingLesson = {
 };
 
 const activities = [
-  { id: 1, name: "田中 誠", text: "「NISA」をクリアしました！", avatar: "/smple_avatars/user1.png" },
-  { id: 2, name: "鈴木 一郎", text: "「社会保障基礎」の学習を始めました！", avatar: "/smple_avatars/user2.png" },
+  { id: 1, name: "田中 誠", text: "「NISA」をクリアしました！", avatar: "/sample_avatars/user1.png" },
+  { id: 2, name: "鈴木 一郎", text: "「社会保障基礎」の学習を始めました！", avatar: "/sample_avatars/user2.png" },
 ];
 
 const reviewLessons = [

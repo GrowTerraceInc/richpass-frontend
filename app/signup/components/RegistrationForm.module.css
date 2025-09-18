@@ -83,6 +83,33 @@
   color: var(--muted);
 }
 
+/* ===== エラーメッセージ（パスワード/確認用） ===== */
+.error{
+  margin-top: 6px;
+  font-size: 13px;
+  color: #ef4444; /* red-500 */
+}
+
+/* ===== 強度メーター（パスワード変更画面と同仕様） ===== */
+.meter {
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--color-gray-100);
+  overflow: hidden;
+  margin-top: 6px;
+}
+.meterFill {
+  height: 100%;
+  width: 0%;
+  transition: width .25s ease;
+  background: #ef4444;        /* 初期: 弱い(赤) */
+  border-radius: 9999px;
+}
+.meter--2 .meterFill { background: #f59e0b; }                 /* オレンジ */
+.meter--3 .meterFill { background: var(--brand); }            /* ブランド橙 */
+.meter--4 .meterFill { background: var(--color-success, #2ECC71); } /* 緑 */
+
+/* 同意チェック行 */
 .agreeRow{
   display:flex;
   align-items:center;

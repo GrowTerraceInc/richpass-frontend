@@ -1,9 +1,10 @@
-import ResetPasswordForm from "./ResetPasswordForm";
-
-export const metadata = {
-  title: "新しいパスワードの設定 | richpass",
-};
+'use client';
 
 export default function Page() {
-  return <ResetPasswordForm />;
+  return (
+    <main style={{padding:24,fontFamily:'system-ui'}}>
+      <h1>Password Reset (temporary stub)</h1>
+      <p>このページは本番対応前の一時スタブです（ビルド解除用）。</p>
+    </main>
+  );
 }
