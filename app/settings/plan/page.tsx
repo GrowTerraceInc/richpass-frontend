@@ -1,3 +1,4 @@
+import PortalAction from './components/PortalAction';
 import SubscribeAction from './components/SubscribeAction';
 import Breadcrumbs from "@/app/components/breadcrumbs/Breadcrumbs";
 import LinkButton from "@/app/components/ui/LinkButton";
@@ -88,6 +89,8 @@ export default async function PlanPage() {
       </div>
     
   <div style={{marginTop:16}}><SubscribeAction /></div>
+
+  <div style={{marginTop:16}}><PortalAction /></div>
 </main>
   );
 }
