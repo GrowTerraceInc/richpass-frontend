@@ -26,7 +26,7 @@ export default function Page() {
   const append = (x: unknown) =>
     setLog((p) => p + '\n' + JSON.stringify(x, null, 2));
 
-  // ★ CSRFつきログイン
+  // CSRF付きログイン
   async function login() {
     await ensureCsrf();
     const xsrf = getXsrfFromCookie();
@@ -40,7 +40,7 @@ export default function Page() {
       },
       body: JSON.stringify({ email, password }),
     });
-    const data = await res.json().catch(() => ({}));
+    const data: unknown = await res.json().catch(() => ({} as unknown));
     append({ login_status: res.status, data });
   }
 
@@ -49,11 +49,11 @@ export default function Page() {
       credentials: 'include',
       headers: { Accept: 'application/json' },
     });
-    const data = await res.json().catch(() => ({}));
+    const data: unknown = await res.json().catch(() => ({} as unknown));
     append({ me_status: res.status, data });
   }
 
-  // ★ CSRFつき Subscribe
+  // CSRF付き Subscribe
   async function subscribe() {
     await ensureCsrf();
     const xsrf = getXsrfFromCookie();
@@ -62,10 +62,14 @@ export default function Page() {
       credentials: 'include',
       headers: { Accept: 'application/json', 'X-XSRF-TOKEN': xsrf },
     });
-    const data = await res.json().catch(() => ({}));
+    const data: unknown = await res.json().catch(() => ({} as unknown));
+    const url = (data as { url?: unknown })?.url;
     append({ subscribe_status: res.status, data });
-    if (res.ok && (data as any)?.url) window.location.href = (data as any).url;
-    if (res.status === 401) append({ hint: '未ログインです。まず「ログイン」を押してください。' });
+    if (res.ok && typeof url === 'string') {
+      window.location.href = url;
+    } else if (res.status === 401) {
+      append({ hint: '未ログインです。まず「ログイン」を押してください。' });
+    }
   }
 
   return (
