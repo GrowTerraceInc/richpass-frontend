@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // モックAPI：解約リクエストを受けて200を返すだけ。
 // 本番ではここで Stripe の Subscription を更新（cancel_at_period_end or cancel_now）し、DBへ記録します。
 export async function POST(req: Request) {

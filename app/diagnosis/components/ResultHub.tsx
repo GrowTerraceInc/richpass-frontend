@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 // app/diagnosis/components/ResultHub.tsx
 import Image from "next/image";
 import {
