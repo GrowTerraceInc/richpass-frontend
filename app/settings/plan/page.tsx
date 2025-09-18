@@ -1,3 +1,4 @@
+import CancelAction from './components/CancelAction';
 import PortalAction from './components/PortalAction';
 import SubscribeAction from './components/SubscribeAction';
 import Breadcrumbs from "@/app/components/breadcrumbs/Breadcrumbs";
@@ -91,6 +92,8 @@ export default async function PlanPage() {
   <div style={{marginTop:16}}><SubscribeAction /></div>
 
   <div style={{marginTop:16}}><PortalAction /></div>
+
+  <div style={{marginTop:16}}><CancelAction /></div>
 </main>
   );
 }
