@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { csrfFetch } from '@/app/lib/csrfFetch';
 const API = process.env.NEXT_PUBLIC_API_ORIGIN!;
@@ -38,7 +39,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <main style={{ padding:24, fontFamily:'system-ui' }}>
-      <a href="/notifications" style={{fontSize:12}}>&larr; 戻る</a>
+      <Link href="/notifications" style={{fontSize:12}}>&larr; 戻る</Link>
       <h1>{n.title}</h1>
       <div style={{fontSize:12, color:'#666'}}>{new Date(n.published_at).toLocaleString()}</div>
       <div style={{marginTop:12, whiteSpace:'pre-wrap'}}>{n.body_md}</div>

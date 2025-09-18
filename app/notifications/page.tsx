@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 const API = process.env.NEXT_PUBLIC_API_ORIGIN!;
 
@@ -14,7 +15,8 @@ export default function Page() {
 
   useEffect(() => {
     fetch(`${API}/api/notifications`, { credentials:'include', headers:{Accept:'application/json'} })
-      .then(r => r.json()).then(d => setItems(d.items ?? []))
+      .then(r => r.json())
+      .then(d => setItems(d.items ?? []))
       .catch(e => setErr(String(e)));
   }, []);
 
@@ -26,7 +28,11 @@ export default function Page() {
         {items.map(n => (
           <li key={n.id} style={{border:'1px solid #ddd', borderRadius:12, padding:12}}>
             {n.is_pinned ? <span style={{fontSize:12, color:'#b50', marginRight:8}}>📌ピン留め</span> : null}
-            <a href={`/notifications/${n.id}`} style={{fontSize:16, textDecoration:'underline'}}>{n.title}</a>
+            <div style={{fontSize:16}}>
+              <Link href={`/notifications/${n.id}`} style={{ textDecoration:'underline' }}>
+                {n.title}
+              </Link>
+            </div>
             <div style={{fontSize:12, color:'#666'}}>{new Date(n.published_at).toLocaleString()}</div>
           </li>
         ))}
