@@ -4,11 +4,27 @@ import { useState } from 'react';
 
 const API = process.env.NEXT_PUBLIC_API_ORIGIN!; // 例: https://api.richpassapp.com
 
+function getXsrfFromCookie() {
+  const m = document.cookie.split('; ').find(v => v.startsWith('XSRF-TOKEN='));
+  return m ? decodeURIComponent(m.split('=')[1]) : '';
+}
+
+async function ensureCsrf() {
+  if (!getXsrfFromCookie()) {
+    await fetch(`${API}/sanctum/csrf-cookie`, {
+      credentials: 'include',
+      headers: { Accept: 'application/json' },
+    });
+  }
+}
+
 export default function Page() {
   const [email, setEmail] = useState('test@richpassapp.com');
   const [password, setPassword] = useState('Abcdef1!');
   const [log, setLog] = useState<string>('準備OK');
-  const append = (x: any) => setLog(p => p + '\n' + JSON.stringify(x, null, 2));
+
+  const append = (x: unknown) =>
+    setLog((p) => p + '\n' + JSON.stringify(x, null, 2));
 
   async function login() {
     const res = await fetch(`${API}/api/auth/login`, {
