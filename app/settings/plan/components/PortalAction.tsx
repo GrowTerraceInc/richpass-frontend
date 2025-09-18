@@ -1,7 +1,5 @@
 'use client';
-
 const API = process.env.NEXT_PUBLIC_API_ORIGIN!;
-
 export default function PortalAction() {
   const go = () => { window.location.href = `${API}/api/billing/portal/redirect`; };
   return (
