@@ -1,0 +1,37 @@
+.wrapper {
+  text-align: center;
+  margin: 40px auto 0;
+  max-width: 720px;
+}
+
+.icon {
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 12px;
+  stroke-width: 2.5;
+  fill: none;
+}
+
+.iconSuccess { stroke: var(--color-success, #16a34a); }
+.iconWarn    { stroke: var(--color-warning, #f59e0b); }
+.iconError   { stroke: var(--color-danger,  #ef4444); }
+.iconInfo    { stroke: var(--color-primary-600, #FF6B00); }
+
+.title {
+  font-size: clamp(20px, 3vw, 24px);
+  font-weight: 800;
+  color: var(--color-gray-900, #0f172a);
+  margin: 8px 0 4px;
+}
+
+.subtext {
+  color: var(--color-gray-600, #6b7280);
+  margin: 8px 0 24px;
+}
+
+.btnRow {
+  display: inline-flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}

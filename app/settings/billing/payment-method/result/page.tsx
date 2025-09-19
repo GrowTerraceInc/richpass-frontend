@@ -2,34 +2,70 @@ export const dynamic = "force-dynamic";
 
 import Breadcrumbs from "@/app/components/breadcrumbs/Breadcrumbs";
 import LinkButton from "@/app/components/ui/LinkButton";
-import styles from "../PaymentMethodPage.module.css";
+import styles from "./ResultPage.module.css";
 
 type SP = Record<string, string | string[] | undefined>;
+const pick = (sp: SP, k: string) =>
+  typeof sp[k] === "string" ? (sp[k] as string) : "";
 
-function pick(searchParams: SP, key: string) {
-  const v = searchParams[key];
-  return typeof v === "string" ? v : "";
+function Icon({ kind }: { kind: "success" | "warn" | "error" | "info" }) {
+  const cls =
+    kind === "success"
+      ? `${styles.icon} ${styles.iconSuccess}`
+      : kind === "warn"
+      ? `${styles.icon} ${styles.iconWarn}`
+      : kind === "error"
+      ? `${styles.icon} ${styles.iconError}`
+      : `${styles.icon} ${styles.iconInfo}`;
+
+  if (kind === "success") {
+    return (
+      <svg viewBox="0 0 24 24" className={cls} aria-hidden>
+        <circle cx="12" cy="12" r="10" />
+        <path d="M7 12l3 3 7-7" />
+      </svg>
+    );
+  }
+  if (kind === "error") {
+    return (
+      <svg viewBox="0 0 24 24" className={cls} aria-hidden>
+        <circle cx="12" cy="12" r="10" />
+        <path d="M8 8l8 8M16 8l-8 8" />
+      </svg>
+    );
+  }
+  // warn / info
+  return (
+    <svg viewBox="0 0 24 24" className={cls} aria-hidden>
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 7v7M12 18h.01" />
+    </svg>
+  );
 }
 
 export default function ResultPage({ searchParams }: { searchParams: SP }) {
-  // Stripe が付与する/こちらで付けた可能性のあるクエリを吸収
   const flow = pick(searchParams, "flow_state") || pick(searchParams, "state");
   const isSuccess = flow === "updated" || flow === "succeeded";
   const isNoChange = flow === "not_updated" || flow === "canceled";
   const isUnavailable = flow === "unavailable";
 
-  // 見出し & サブメッセージ
-  const title = "お支払い方法の変更";
-  let body =
-    "処理が完了しました。念のためプラン管理で最新のカード末尾をご確認ください。";
+  const kind: "success" | "warn" | "error" | "info" = isSuccess
+    ? "success"
+    : isNoChange
+    ? "warn"
+    : isUnavailable
+    ? "error"
+    : "info";
 
-  if (isSuccess) {
-    body = "カード情報の更新が完了しました。プラン管理に反映されるまで数秒かかる場合があります。";
-  } else if (isNoChange) {
-    body = "変更は行われませんでした。もう一度やり直す場合は「お支払い方法を変更」から再度お試しください。";
-  } else if (isUnavailable) {
-    body = "現在Stripeに接続できませんでした。時間をおいて再度お試しください。";
-  }
+  const title = "お支払い方法の変更";
+
+  const message = isSuccess
+    ? "カード情報の更新が完了しました。プラン管理に反映されるまで数秒かかる場合があります。"
+    : isNoChange
+    ? "変更は行われませんでした。もう一度やり直す場合は「お支払い方法を変更」から再度お試しください。"
+    : isUnavailable
+    ? "現在Stripeへの接続に問題が発生しました。時間をおいて再度お試しください。"
+    : "処理が完了しました。念のためプラン管理で最新のカード末尾をご確認ください。";
 
   return (
     <main className="container">
@@ -44,28 +80,25 @@ export default function ResultPage({ searchParams }: { searchParams: SP }) {
         />
       </div>
 
-      <div className={styles.header}>
+      <div className={styles.wrapper} role="status" aria-live="polite">
+        <Icon kind={kind} />
         <h1 className={styles.title}>{title}</h1>
-      </div>
+        <p className={styles.subtext}>{message}</p>
 
-      <div className={styles.wrap}>
-        <section className={styles.card}>
-          <p style={{ margin: 0 }}>{body}</p>
-          <div className={styles.actions} style={{ marginTop: 8 }}>
-            <LinkButton variant="secondary" href="/settings/plan" size="small">
-              プラン管理に戻る
+        <div className={styles.btnRow}>
+          <LinkButton variant="secondary" href="/settings/plan" size="small">
+            プラン管理に戻る
+          </LinkButton>
+          {!isSuccess && (
+            <LinkButton
+              variant="primary"
+              href="/settings/billing/payment-method"
+              size="small"
+            >
+              もう一度試す
             </LinkButton>
-            {!isSuccess && (
-              <LinkButton
-                variant="primary"
-                href="/settings/billing/payment-method"
-                size="small"
-              >
-                もう一度試す
-              </LinkButton>
-            )}
-          </div>
-        </section>
+          )}
+        </div>
       </div>
     </main>
   );
