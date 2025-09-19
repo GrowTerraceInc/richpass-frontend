@@ -27,9 +27,11 @@ export default function BillingHistoryList() {
       .catch(() => setItems([]));
   }, []);
 
+  // ★ hooksは条件分岐の前で呼ぶ
+  const shown = useMemo(() => items.slice(0, limit), [items, limit]);
+
   if (unauth) return null;
 
-  const shown = useMemo(() => items.slice(0, limit), [items, limit]);
   const yen = (n:number) => `¥${(n/100).toLocaleString('ja-JP')}`;
 
   return (
@@ -37,7 +39,7 @@ export default function BillingHistoryList() {
       <h2 className={styles.cardTitle}>お支払い履歴</h2>
       <div className={styles.list}>
         {shown.map(it => {
-          const d = new Date(it.date || it['created'] || Date.now());
+          const d = new Date(it.date || (it as any)['created'] || Date.now());
           const date = d.toLocaleDateString('ja-JP', { year:'numeric', month:'long', day:'numeric' });
           const amount = yen(it.amount || 0);
           const url = it.receiptUrl ?? it.receipt_url ?? null;
