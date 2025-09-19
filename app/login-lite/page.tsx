@@ -2,67 +2,146 @@
 
 import { useState } from 'react';
 
-const API = process.env.NEXT_PUBLIC_API_ORIGIN!;
+const API = (process.env.NEXT_PUBLIC_API_ORIGIN || 'https://api.richpassapp.com').replace(/\/$/, '');
 
-function getXsrf() {
-  const m = document.cookie.split('; ').find(v => v.startsWith('XSRF-TOKEN='));
-  return m ? decodeURIComponent(m.split('=')[1]) : '';
+function getErrorMessage(err: unknown): string {
+  if (err instanceof Error) return err.message;
+  try {
+    return JSON.stringify(err);
+  } catch {
+    return String(err);
+  }
 }
 
-export default function Page() {
+export default function LoginLitePage() {
   const [email, setEmail] = useState('test@richpassapp.com');
-  const [password, setPassword] = useState('Abcdef1!');
+  const [password, setPassword] = useState('');
   const [log, setLog] = useState<string>('準備OK');
+  const [busy, setBusy] = useState(false);
 
-  const append = (x: unknown) => setLog(p => p + '\n' + JSON.stringify(x, null, 2));
+  const getXsrfTokenFromCookie = () => {
+    const m = document.cookie.split('; ').find((c) => c.startsWith('XSRF-TOKEN='));
+    return m ? decodeURIComponent(m.split('=')[1]) : '';
+  };
 
-  async function login() {
+  const handleLogin = async () => {
+    setBusy(true);
     try {
-      await fetch(`${API}/sanctum/csrf-cookie`, { credentials:'include', headers:{Accept:'application/json'} });
-      const xsrf = getXsrf();
-      const r = await fetch(`${API}/api/auth/login`, {
-        method:'POST',
-        credentials:'include',
-        headers:{ Accept:'application/json','Content-Type':'application/json','X-XSRF-TOKEN': xsrf },
+      setLog('CSRF を取得中…');
+
+      // 1) CSRF Cookie
+      {
+        const r = await fetch(`${API}/sanctum/csrf-cookie`, {
+          credentials: 'include',
+        });
+        if (!r.ok) throw new Error(`csrf-cookie HTTP ${r.status}`);
+      }
+
+      // 2) /login
+      setLog('ログイン中…');
+      const xsrf = getXsrfTokenFromCookie();
+
+      const r2 = await fetch(`${API}/login`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'X-XSRF-TOKEN': xsrf,
+        },
         body: JSON.stringify({ email, password }),
       });
-      const d: unknown = await r.json().catch(()=>({}));
-      append({ login_status:r.status, d });
-    } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : String(e);
-      append({ login_error: msg });
-    }
-  }
 
-  async function logout() {
-    try {
-      await fetch(`${API}/sanctum/csrf-cookie`, { credentials:'include', headers:{Accept:'application/json'} });
-      const xsrf = getXsrf();
-      const r = await fetch(`${API}/api/logout`, {
-        method:'POST',
-        credentials:'include',
-        headers:{ Accept:'application/json','X-XSRF-TOKEN': xsrf },
-      });
-      const d: unknown = await r.json().catch(()=>({}));
-      append({ logout_status:r.status, d });
-    } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : String(e);
-      append({ logout_error: msg });
+      const data: unknown = await r2.json().catch(() => ({}));
+
+      if (!r2.ok) {
+        setLog(`login: HTTP ${r2.status}\n` + JSON.stringify(data, null, 2));
+        return;
+      }
+
+      setLog('ログイン成功！/settings/plan に移動します…');
+      location.href = '/settings/plan';
+    } catch (err: unknown) {
+      setLog(`エラー: ${getErrorMessage(err)}`);
+    } finally {
+      setBusy(false);
     }
-  }
+  };
+
+  const handleLogout = async () => {
+    setBusy(true);
+    try {
+      setLog('ログアウト中…');
+
+      const xsrf = getXsrfTokenFromCookie();
+      const r = await fetch(`${API}/logout`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'X-XSRF-TOKEN': xsrf,
+        },
+      });
+
+      if (!r.ok) {
+        const d: unknown = await r.json().catch(() => ({}));
+        setLog(`logout: HTTP ${r.status}\n` + JSON.stringify(d, null, 2));
+        return;
+      }
+
+      setLog('ログアウトしました。');
+    } catch (err: unknown) {
+      setLog(`エラー: ${getErrorMessage(err)}`);
+    } finally {
+      setBusy(false);
+    }
+  };
 
   return (
-    <main style={{ padding:24, fontFamily:'system-ui' }}>
+    <main style={{ maxWidth: 640, margin: '40px auto', padding: '0 20px' }}>
       <h1>Login (Lite)</h1>
-      <div style={{ display:'grid', gap:8, maxWidth:420 }}>
-        <label>Email<input value={email} onChange={e=>setEmail(e.target.value)} style={{ width:'100%' }} /></label>
-        <label>Password<input type="password" value={password} onChange={e=>setPassword(e.target.value)} style={{ width:'100%' }} /></label>
-        <div style={{ display:'flex', gap:8 }}>
-          <button onClick={login}>ログイン</button>
-          <button onClick={logout}>ログアウト</button>
-        </div>
-        <pre style={{ background:'#111', color:'#0f0', padding:12, minHeight:160, whiteSpace:'pre-wrap' }}>{log}</pre>
+
+      <div style={{ marginTop: 16 }}>
+        <label>Email</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          style={{ display: 'block', width: '100%', padding: 6 }}
+        />
       </div>
+
+      <div style={{ marginTop: 12 }}>
+        <label>Password</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          style={{ display: 'block', width: '100%', padding: 6 }}
+        />
+      </div>
+
+      <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+        <button onClick={handleLogin} disabled={busy} style={{ padding: '6px 12px' }}>
+          ログイン
+        </button>
+        <button onClick={handleLogout} disabled={busy} style={{ padding: '6px 12px' }}>
+          ログアウト
+        </button>
+      </div>
+
+      <pre
+        style={{
+          marginTop: 16,
+          background: '#111',
+          color: '#9fef00',
+          padding: 12,
+          borderRadius: 6,
+          whiteSpace: 'pre-wrap',
+        }}
+      >
+        {log}
+      </pre>
     </main>
   );
 }
