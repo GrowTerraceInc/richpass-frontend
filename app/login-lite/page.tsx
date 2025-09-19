@@ -26,9 +26,12 @@ export default function Page() {
         headers:{ Accept:'application/json','Content-Type':'application/json','X-XSRF-TOKEN': xsrf },
         body: JSON.stringify({ email, password }),
       });
-      const d = await r.json().catch(()=>({}));
+      const d: unknown = await r.json().catch(()=>({}));
       append({ login_status:r.status, d });
-    } catch (e:any) { append({ login_error:String(e?.message||e) }); }
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      append({ login_error: msg });
+    }
   }
 
   async function logout() {
@@ -36,11 +39,16 @@ export default function Page() {
       await fetch(`${API}/sanctum/csrf-cookie`, { credentials:'include', headers:{Accept:'application/json'} });
       const xsrf = getXsrf();
       const r = await fetch(`${API}/api/logout`, {
-        method:'POST', credentials:'include', headers:{ Accept:'application/json','X-XSRF-TOKEN': xsrf },
+        method:'POST',
+        credentials:'include',
+        headers:{ Accept:'application/json','X-XSRF-TOKEN': xsrf },
       });
-      const d = await r.json().catch(()=>({}));
+      const d: unknown = await r.json().catch(()=>({}));
       append({ logout_status:r.status, d });
-    } catch (e:any) { append({ logout_error:String(e?.message||e) }); }
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      append({ logout_error: msg });
+    }
   }
 
   return (
