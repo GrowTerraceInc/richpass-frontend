@@ -1,43 +1,25 @@
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
-import Breadcrumbs from "@/app/components/breadcrumbs/Breadcrumbs";
-import LinkButton from "@/app/components/ui/LinkButton";
-import styles from "./PlanPage.module.css";
-import { loadPlans, loadSubscriptionStatus, loadBillingHistory } from "@/app/lib/billing";
-import BillingHistoryList from "@/app/components/billing/BillingHistoryList";
+import Breadcrumbs from '@/app/components/breadcrumbs/Breadcrumbs';
+import styles from './PlanPage.module.css';
 
-function formatDateYmd(iso?: string) {
-  if (!iso) return "-";
-  const d = new Date(iso);
-  return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
-}
+// ※ ここがポイント：サーバーで load* は呼ばない
+// import { loadPlans, loadSubscriptionStatus, loadBillingHistory } from '@/app/lib/billing';
+// import BillingHistoryList from '@/app/components/billing/BillingHistoryList';
 
-function displayName(name: string, planId: string) {
-  if (planId.toLowerCase() === "pro" || name.toUpperCase() === "PRO") return "PREMIUM";
-  if (planId.toLowerCase() === "premium") return "PREMIUM";
-  return "FREE";
-}
+// クライアント側でAPIを叩く版に差し替え
+import PlanOverviewCard from './components/PlanOverviewCard';
+import BillingHistoryList from './components/BillingHistoryList';
 
-export default async function PlanPage() {
-  const [plans, sub, history] = await Promise.all([
-    loadPlans(),
-    loadSubscriptionStatus(),
-    loadBillingHistory(),
-  ]);
-
-  // 実データを優先して判定（大文字小文字を吸収）
-  const current = sub
-    ? plans.find((p) => p.planId.toLowerCase() === (sub.currentPlanId ?? "").toLowerCase())
-    : undefined;
-  const isPremium = (current?.planId ?? "").toLowerCase() === "premium";
-
+export default function PlanPage() {
   return (
     <main className="container">
       <div className="header">
         <Breadcrumbs
           items={[
-            { label: "マイページ", href: "/mypage" },
-            { label: "プラン管理", href: "/settings/plan" },
+            { label: 'マイページ', href: '/mypage' },
+            { label: 'プラン管理', href: '/settings/plan' },
           ]}
         />
       </div>
@@ -47,45 +29,15 @@ export default async function PlanPage() {
       </div>
 
       <div className={styles.wrap}>
-        {/* 現在のプラン（実データ） */}
+        {/* 現在のプラン：ブラウザから /api/subscription/status を取得 */}
         <section className={styles.currentCard}>
-          <div className={styles.row}>
-            <div className={styles.label}>現在のプラン</div>
-            <div className={styles.value}>
-              {current ? displayName(current.name, current.planId) : (sub?.currentPlanId?.toUpperCase() ?? "-")}
-              {sub?.status === "past_due" && "（お支払い要確認）"}
-              {sub?.status === "canceled" && "（解約済み）"}
-            </div>
-          </div>
-          <div className={styles.row}>
-            <div className={styles.label}>更新日</div>
-            <div className={styles.value}>
-              {sub?.cancelAtPeriodEnd ? "期間末で解約予定" : formatDateYmd(sub?.renewsAt)}
-            </div>
-          </div>
-          <div className={styles.row}>
-            <div className={styles.label}>お支払い方法</div>
-            <div className={styles.value}>
-              {sub?.last4 ? `**** **** **** ${sub.last4}` : "-"}
-            </div>
-          </div>
-
-          <div className={styles.actions}>
-            <LinkButton variant="secondary" size="small" href="/settings/billing/payment-method">
-              支払い方法を変更
-            </LinkButton>
-
-            {/* ← 常時表示。FREEのときは「アップグレード」、PREMIUMのときは「プランを変更」 */}
-            <LinkButton variant="secondary" size="small" href="/settings/plan/change">
-              {isPremium ? "プランを変更" : "プレミアムにアップグレード"}
-            </LinkButton>
-          </div>
+          <PlanOverviewCard />
         </section>
 
-        {/* 請求履歴（実データ） */}
+        {/* お支払い履歴：ブラウザから /api/billing/history を取得 */}
         <section className={styles.historyCard}>
           <h2 className={styles.h2}>お支払い履歴</h2>
-          <BillingHistoryList items={history} initialCount={12} step={12} />
+          <BillingHistoryList />
         </section>
       </div>
     </main>
