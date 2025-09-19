@@ -1,3 +1,4 @@
+import PlanStatusBadge from './components/PlanStatusBadge';
 import CancelAction from './components/CancelAction';
 import PortalAction from './components/PortalAction';
 import SubscribeAction from './components/SubscribeAction';
@@ -40,6 +41,7 @@ export default async function PlanPage() {
 
       <div className={styles.header}>
         <h1 className={styles.title}>プラン管理</h1>
+      <PlanStatusBadge />
       </div>
 
       <div className={styles.wrap}>
