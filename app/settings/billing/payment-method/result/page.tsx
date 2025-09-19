@@ -38,7 +38,9 @@ function Icon({ kind }: { kind: "success" | "warn" | "error" | "info" }) {
   return (
     <svg viewBox="0 0 24 24" className={cls} aria-hidden>
       <circle cx="12" cy="12" r="10" />
-      <path d="M12 7v7M12 18h.01" />
+      <path d="M12 7v7" />
+      {/* 点（塗りつぶし） */}
+      <circle cx="12" cy="18.2" r="1.2" fill="currentColor" stroke="none" />
     </svg>
   );
 }
@@ -60,12 +62,12 @@ export default function ResultPage({ searchParams }: { searchParams: SP }) {
   const title = "お支払い方法の変更";
 
   const message = isSuccess
-    ? "カード情報の更新が完了しました。プラン管理に反映されるまで数秒かかる場合があります。"
-    : isNoChange
-    ? "変更は行われませんでした。もう一度やり直す場合は「お支払い方法を変更」から再度お試しください。"
-    : isUnavailable
-    ? "現在Stripeへの接続に問題が発生しました。時間をおいて再度お試しください。"
-    : "処理が完了しました。念のためプラン管理で最新のカード末尾をご確認ください。";
+  ? "カード情報の更新が完了しました。\nプラン管理に反映されるまで数秒かかる場合があります。"
+  : isNoChange
+  ? "変更は行われませんでした。\nもう一度やり直す場合は「お支払い方法を変更」から再度お試しください。"
+  : isUnavailable
+  ? "現在Stripeへの接続に問題が発生しました。\n時間をおいて再度お試しください。"
+  : "処理が完了しました。\n念のためプラン管理で最新のカード末尾をご確認ください。";
 
   return (
     <main className="container">

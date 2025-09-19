@@ -27,6 +27,7 @@
 .subtext {
   color: var(--color-gray-600, #6b7280);
   margin: 8px 0 24px;
+  white-space: pre-line;
 }
 
 .btnRow {
