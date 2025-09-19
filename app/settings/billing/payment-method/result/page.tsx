@@ -38,9 +38,20 @@ function Icon({ kind }: { kind: "success" | "warn" | "error" | "info" }) {
   return (
     <svg viewBox="0 0 24 24" className={cls} aria-hidden>
       <circle cx="12" cy="12" r="10" />
-      <path d="M12 7v7" />
-      {/* 点（塗りつぶし） */}
-      <circle cx="12" cy="18.2" r="1.2" fill="currentColor" stroke="none" />
+      {/* 縦棒：やや上からやや下まで（中心に見えやすい長さ） */}
+      <path d="M12 6.8v7.4" />
+      {/* 点：塗りつぶし。warn は警告色、info はブランド色を明示指定 */}
+      <circle
+        cx="12"
+        cy="17.6"
+        r="1.3"
+        fill={
+          kind === "warn"
+            ? "var(--color-warning, #f59e0b)"
+            : "var(--color-primary-600, #FF6B00)"
+        }
+        stroke="none"
+      />
     </svg>
   );
 }
