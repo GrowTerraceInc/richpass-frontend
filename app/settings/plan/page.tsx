@@ -1,6 +1,6 @@
+export const dynamic = "force-dynamic";
+
 import CancelAction from './components/CancelAction';
-import PortalAction from './components/PortalAction';
-import SubscribeAction from './components/SubscribeAction';
 import Breadcrumbs from "@/app/components/breadcrumbs/Breadcrumbs";
 import LinkButton from "@/app/components/ui/LinkButton";
 import styles from "./PlanPage.module.css";
@@ -25,7 +25,12 @@ export default async function PlanPage() {
     loadSubscriptionStatus(),
     loadBillingHistory(),
   ]);
-  const current = plans.find((p) => p.planId === sub?.currentPlanId);
+
+  // 実データを優先して判定（大文字小文字を吸収）
+  const current = sub
+    ? plans.find((p) => p.planId.toLowerCase() === (sub.currentPlanId ?? "").toLowerCase())
+    : undefined;
+  const isPremium = (current?.planId ?? "").toLowerCase() === "premium";
 
   return (
     <main className="container">
@@ -43,13 +48,14 @@ export default async function PlanPage() {
       </div>
 
       <div className={styles.wrap}>
+        {/* 現在のプラン（実データ） */}
         <section className={styles.currentCard}>
           <div className={styles.row}>
             <div className={styles.label}>現在のプラン</div>
             <div className={styles.value}>
-              {current ? displayName(current.name, current.planId) : sub?.currentPlanId ?? "-"}
-              {sub?.status === "past_due" ? "（お支払い要確認）" : ""}
-              {sub?.status === "canceled" ? "（解約済み）" : ""}
+              {current ? displayName(current.name, current.planId) : (sub?.currentPlanId?.toUpperCase() ?? "-")}
+              {sub?.status === "past_due" && "（お支払い要確認）"}
+              {sub?.status === "canceled" && "（解約済み）"}
             </div>
           </div>
           <div className={styles.row}>
@@ -61,39 +67,36 @@ export default async function PlanPage() {
           <div className={styles.row}>
             <div className={styles.label}>お支払い方法</div>
             <div className={styles.value}>
-              {sub?.last4 ? `**** **** **** ${sub.last4}` : "未設定 / モック"}
+              {sub?.last4 ? `**** **** **** ${sub.last4}` : "-"}
             </div>
           </div>
 
           <div className={styles.actions}>
-            {/* 小さめボタンに（デスクトップでも違和感なし） */}
             <LinkButton variant="secondary" size="small" href="/settings/billing/payment-method">
               支払い方法を変更
             </LinkButton>
+
+            {/* ← 常時表示。FREEのときは「アップグレード」、PREMIUMのときは「プランを変更」 */}
             <LinkButton variant="secondary" size="small" href="/settings/plan/change">
-              プランを変更
+              {isPremium ? "プランを変更" : "プレミアムにアップグレード"}
             </LinkButton>
           </div>
         </section>
 
+        {/* 請求履歴（実データ） */}
         <section className={styles.historyCard}>
           <h2 className={styles.h2}>お支払い履歴</h2>
           <BillingHistoryList items={history} initialCount={12} step={12} />
-          <div className={styles.colMuted} style={{ marginTop: 6 }}>
-            ※ 領収書リンクはモックです。Stripe連携後は各請求（Invoice）のPDF/Hosted Invoice URLを表示します。
-          </div>
         </section>
 
-        <div style={{ color: "var(--color-gray-600)", fontSize: 13 }}>
-          ※ 現在はモック表示です。Stripe連携後に「プランを変更」からチェックアウト/ポータルへ遷移します。
+        {/* 解約（既存のコンポーネント導線は1箇所に集約） */}
+        <div style={{ color: "var(--color-gray-600)", fontSize: 13, marginTop: 6 }}>
+          解約はいつでも再開できます。即時解約はすぐに視聴不可になります。
+        </div>
+        <div style={{ marginTop: 8 }}>
+          <CancelAction />
         </div>
       </div>
-    
-  <div style={{marginTop:16}}><SubscribeAction /></div>
-
-  <div style={{marginTop:16}}><PortalAction /></div>
-
-  <div style={{marginTop:16}}><CancelAction /></div>
-</main>
+    </main>
   );
 }
