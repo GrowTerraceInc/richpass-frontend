@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import styles from '../Plan.module.css';
 
 const API = process.env.NEXT_PUBLIC_API_ORIGIN!;
 
@@ -14,48 +15,30 @@ type StatusRow = {
 
 export default function PlanStatusBadge() {
   const [row, setRow] = useState<StatusRow | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [unauth, setUnauth] = useState(false);
 
   useEffect(() => {
-    fetch(`${API}/api/subscription/status`, {
-      credentials: 'include',
-      headers: { Accept: 'application/json' },
-    })
-      .then(r => r.json())
+    fetch(`${API}/api/subscription/status`, { credentials:'include', headers:{Accept:'application/json'} })
+      .then(async r => { if (r.status === 401) { setUnauth(true); return { status:null }; } return r.json(); })
       .then(d => setRow(d.status ?? null))
-      .catch(e => setError(String(e)));
+      .catch(() => {});
   }, []);
 
-  if (error) return <div style={{color:'#b00'}}>読み込みエラー</div>;
-  if (!row)  return null;
+  if (unauth) return <div className={styles.subtle}>ログインが必要です。<a href="/login-lite" style={{textDecoration:'underline'}}>ログインする</a></div>;
+  if (!row) return null;
 
-  const plan = row.current_plan_id ?? 'FREE';
+  const plan   = row.current_plan_id ?? 'FREE';
   const status = row.status ?? '—';
-  const renew = row.renews_at ? new Date(row.renews_at).toLocaleDateString() : '—';
-  const atEnd = !!row.cancel_at_period_end;
+  const renew  = row.renews_at ? new Date(row.renews_at).toLocaleDateString() : '—';
+  const atEnd  = !!row.cancel_at_period_end;
 
-  const chipColor =
-    status === 'current' ? '#0a0'
-    : status === 'past_due' ? '#b60'
-    : status === 'canceled' ? '#999'
-    : '#666';
-
+  const planCls = `${styles.chip} ${styles.chipPrimary}`;
   return (
-    <div style={{display:'flex', gap:8, alignItems:'center', flexWrap:'wrap', margin:'8px 0 16px'}}>
-      <span style={{border:`1px solid ${chipColor}`, color:chipColor, borderRadius:999, padding:'4px 10px', fontSize:12}}>
-        {plan}
-      </span>
-      <span style={{border:'1px solid #ccc', borderRadius:999, padding:'4px 10px', fontSize:12}}>
-      状態: {status}
-      </span>
-      <span style={{border:'1px solid #ccc', borderRadius:999, padding:'4px 10px', fontSize:12}}>
-        次回更新: {renew}
-      </span>
-      {atEnd && (
-        <span style={{border:'1px solid #c00', color:'#c00', borderRadius:999, padding:'4px 10px', fontSize:12}}>
-          期末で解約予定
-        </span>
-      )}
+    <div className={styles.badges}>
+      <span className={planCls}>{plan}</span>
+      <span className={styles.chip}>状態: {status}</span>
+      <span className={styles.chip}>次回更新: {renew}</span>
+      {atEnd && <span className={`${styles.chip} ${styles.chipWarn}`}>期末で解約予定</span>}
     </div>
   );
 }
