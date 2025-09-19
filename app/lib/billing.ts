@@ -1,7 +1,10 @@
-import fs from "node:fs/promises";
-import path from "node:path";
-import Papa, { ParseResult } from "papaparse";
+import { cookies } from "next/headers";
 
+const API =
+  process.env.NEXT_PUBLIC_API_ORIGIN?.replace(/\/$/, "") ||
+  "https://api.richpassapp.com";
+
+/* ====== 既存の型（UI互換のため維持） ====== */
 export type Plan = {
   planId: string;
   name: string;
@@ -16,137 +19,120 @@ export type SubscriptionStatus = {
   userId: string;
   status: "active" | "past_due" | "canceled";
   currentPlanId: string;
-  renewsAt?: string;                // ISO
+  renewsAt?: string; // ISO
   cancelAtPeriodEnd?: boolean;
-  last4?: string;                   // 支払い方法の末尾4桁（モック）
-};
-
-export type BillingHistoryItem = {
-  id: string;           // 取引ID or 請求ID（モック）
-  date: string;         // ISO
-  description: string;  // 例：8月利用料金
-  amount: number;       // 税込金額 (整数円)
-  currency: string;     // "JPY"
-  receiptUrl?: string;  // StripeのHosted Invoice URLなど（任意）
-};
-
-type PlanCsv = {
-  planId?: string;
-  name?: string;
-  priceMonthly?: string;
-  priceYearly?: string;
-  featuresJson?: string;
-  stripePriceIdMonthly?: string;
-  stripePriceIdYearly?: string;
-};
-
-type SubCsv = {
-  userId?: string;
-  status?: SubscriptionStatus["status"];
-  currentPlanId?: string;
-  renewsAt?: string;
-  cancelAtPeriodEnd?: string | boolean;
   last4?: string;
 };
 
-type HistoryCsv = {
-  userId?: string;
-  id?: string;
-  date?: string;
-  description?: string;
-  amount?: string;
-  currency?: string;
-  receiptUrl?: string;
+export type BillingHistoryItem = {
+  id: string;
+  date: string; // ISO
+  description: string;
+  amount: number; // 整数円（JPYはゼロ小数）
+  currency: string;
+  receiptUrl?: string | null;
 };
 
-async function readFirst(paths: string[]): Promise<string | null> {
-  for (const p of paths) {
-    try { return await fs.readFile(p, "utf-8"); } catch { /* try next */ }
-  }
-  return null;
+/* ====== APIレスポンスの型（any を使わない） ====== */
+type ApiStatusRow = {
+  current_plan_id?: string | null;
+  status?: string | null; // 'current' | 'past_due' | 'canceled' | その他
+  renews_at?: string | null;
+  cancel_at_period_end?: boolean | null;
+  last4?: string | null;
+};
+type ApiStatusResp = { status?: ApiStatusRow | null };
+
+type ApiHistoryItem = {
+  id: string | number;
+  date: string;
+  description?: string | null;
+  amount?: number | string | null;
+  currency?: string | null;
+  receipt_url?: string | null;
+  receiptUrl?: string | null; // 念のため両対応
+};
+type ApiHistoryResp = { items?: ApiHistoryItem[] };
+
+/* ====== RSC から Cookie を転送して API を叩く ====== */
+async function rscFetch<T>(path: string): Promise<T> {
+  const jar = await cookies(); // ※あなたのメモ通り await 必須
+  const cookieHeader = jar
+    .getAll()
+    .map((c) => `${c.name}=${c.value}`)
+    .join("; ");
+
+  const res = await fetch(`${API}${path}`, {
+    headers: { Accept: "application/json", Cookie: cookieHeader },
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status} for ${path}`);
+  return (await res.json()) as T;
 }
 
-function toBool(v: unknown, def = false): boolean {
-  if (typeof v === "boolean") return v;
-  const s = String(v ?? "").trim().toLowerCase();
-  if (!s) return def;
-  return s === "true" || s === "1" || s === "yes";
-}
+/* ====== 実装 ====== */
 
+// 1) プラン（表示名のための最小ダミー：UIを触らずに済む）
 export async function loadPlans(): Promise<Plan[]> {
-  const cwd = process.cwd();
-  const candidates = [
-    path.join(cwd, "app", "mock", "Plans.csv"),
-    path.join(cwd, "app", "mock", "plans.csv"),
-    path.join(cwd, "public", "mock", "Plans.csv"),
-    path.join(cwd, "public", "mock", "plans.csv"),
+  return [
+    { planId: "free", name: "FREE", priceMonthly: 0, priceYearly: 0, features: [] },
+    { planId: "premium", name: "PREMIUM", priceMonthly: 980, priceYearly: 0, features: [] },
   ];
-  const csv = await readFirst(candidates);
-  if (!csv) return [];
-  const parsed: ParseResult<PlanCsv> = Papa.parse<PlanCsv>(csv, { header: true, skipEmptyLines: true });
-  return parsed.data.map((r) => ({
-    planId: String(r.planId ?? "").trim(),
-    name: String(r.name ?? "").trim(),
-    priceMonthly: Number(r.priceMonthly ?? 0),
-    priceYearly: Number(r.priceYearly ?? 0),
-    features: r.featuresJson ? safeParseFeatures(r.featuresJson) : [],
-    stripePriceIdMonthly: r.stripePriceIdMonthly || undefined,
-    stripePriceIdYearly: r.stripePriceIdYearly || undefined,
-  })).filter(p => p.planId && p.name);
 }
 
-function safeParseFeatures(s: string): string[] {
+// 2) 現在プラン/更新日/末尾4桁
+export async function loadSubscriptionStatus(
+  userId = "u_demo_001" // 既存シグネチャ維持（UI互換のため残す）
+): Promise<SubscriptionStatus | null> {
   try {
-    const v = JSON.parse(s);
-    return Array.isArray(v) ? v.map(x => String(x)) : [];
+    const d = await rscFetch<ApiStatusResp>("/api/subscription/status");
+    const s = d?.status ?? null;
+    if (!s) return null;
+
+    const mapStatus = (x: string | null | undefined): SubscriptionStatus["status"] => {
+      if (x === "past_due") return "past_due";
+      if (x === "canceled") return "canceled";
+      return "active"; // 'current' などは active に寄せる
+    };
+
+    return {
+      userId,
+      status: mapStatus(s.status),
+      currentPlanId: String(s.current_plan_id ?? "free"),
+      renewsAt: s.renews_at ?? undefined,
+      cancelAtPeriodEnd: !!s.cancel_at_period_end,
+      last4: s.last4 ?? undefined,
+    };
+  } catch {
+    return null;
+  }
+}
+
+// 3) 請求履歴（最大24件）
+export async function loadBillingHistory(
+  _userId = "u_demo_001" // 既存シグネチャ維持（未使用のため _ プレフィックス）
+): Promise<BillingHistoryItem[]> {
+  void _userId;
+
+  try {
+    const d = await rscFetch<ApiHistoryResp>("/api/billing/history");
+    const items = Array.isArray(d.items) ? d.items : [];
+
+    const mapped: BillingHistoryItem[] = items.map((it) => {
+      const url = it.receipt_url ?? it.receiptUrl ?? null;
+      return {
+        id: String(it.id),
+        date: String(it.date),
+        description: String(it.description ?? "ご利用料金"),
+        amount: Number(it.amount ?? 0),
+        currency: String(it.currency ?? "jpy"),
+        receiptUrl: url,
+      };
+    });
+
+    mapped.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    return mapped;
   } catch {
     return [];
   }
-}
-
-export async function loadSubscriptionStatus(userId = "u_demo_001"): Promise<SubscriptionStatus | null> {
-  const cwd = process.cwd();
-  const candidates = [
-    path.join(cwd, "app", "mock", "Subscription_Status.csv"),
-    path.join(cwd, "app", "mock", "subscription_status.csv"),
-    path.join(cwd, "public", "mock", "Subscription_Status.csv"),
-    path.join(cwd, "public", "mock", "subscription_status.csv"),
-  ];
-  const csv = await readFirst(candidates);
-  if (!csv) return null;
-  const parsed: ParseResult<SubCsv> = Papa.parse<SubCsv>(csv, { header: true, skipEmptyLines: true });
-  const row = parsed.data.find(r => String(r.userId ?? "").trim() === userId);
-  if (!row) return null;
-  return {
-    userId,
-    status: (row.status ?? "active"),
-    currentPlanId: String(row.currentPlanId ?? "free"),
-    renewsAt: row.renewsAt || undefined,
-    cancelAtPeriodEnd: toBool(row.cancelAtPeriodEnd, false),
-    last4: row.last4 || undefined,
-  };
-}
-
-export async function loadBillingHistory(userId = "u_demo_001"): Promise<BillingHistoryItem[]> {
-  const cwd = process.cwd();
-  const candidates = [
-    path.join(cwd, "app", "mock", "Billing_History.csv"),
-    path.join(cwd, "app", "mock", "billing_history.csv"),
-    path.join(cwd, "public", "mock", "Billing_History.csv"),
-    path.join(cwd, "public", "mock", "billing_history.csv"),
-  ];
-  const csv = await readFirst(candidates);
-  if (!csv) return [];
-  const parsed: ParseResult<HistoryCsv> = Papa.parse<HistoryCsv>(csv, { header: true, skipEmptyLines: true });
-  const rows = parsed.data.filter(r => String(r.userId ?? "").trim() === userId);
-  const items = rows.map((r) => ({
-    id: String(r.id ?? "").trim(),
-    date: String(r.date ?? ""),
-    description: String(r.description ?? ""),
-    amount: Number(r.amount ?? 0),
-    currency: String(r.currency ?? "JPY"),
-    receiptUrl: r.receiptUrl || undefined,
-  })).filter(x => x.id && x.date);
-  items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  return items;
 }
