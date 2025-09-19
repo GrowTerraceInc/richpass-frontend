@@ -1,6 +1,5 @@
 export const dynamic = "force-dynamic";
 
-import CancelAction from './components/CancelAction';
 import Breadcrumbs from "@/app/components/breadcrumbs/Breadcrumbs";
 import LinkButton from "@/app/components/ui/LinkButton";
 import styles from "./PlanPage.module.css";
@@ -88,14 +87,6 @@ export default async function PlanPage() {
           <h2 className={styles.h2}>お支払い履歴</h2>
           <BillingHistoryList items={history} initialCount={12} step={12} />
         </section>
-
-        {/* 解約（既存のコンポーネント導線は1箇所に集約） */}
-        <div style={{ color: "var(--color-gray-600)", fontSize: 13, marginTop: 6 }}>
-          解約はいつでも再開できます。即時解約はすぐに視聴不可になります。
-        </div>
-        <div style={{ marginTop: 8 }}>
-          <CancelAction />
-        </div>
       </div>
     </main>
   );
