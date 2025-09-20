@@ -7,12 +7,12 @@ import styles from './PlanPage.module.css';
 import BillingHistoryList from '@/app/components/billing/BillingHistoryList';
 import type { BillingHistoryItem } from '@/app/lib/billing';
 
-// NEW: PlanStatusCard を動的インポート
-import NextDynamic from 'next/dynamic';
-const PlanStatusCard = NextDynamic(() => import('./PlanStatusCard'), { ssr: false });
+// ←★ dynamicは使わず、静的importに変更（Server Component内でssr:false禁止エラーの回避）
+import PlanStatusCard from './PlanStatusCard';
 
-export default async function PlanPage() {
+export default function PlanPage() {
   const emptyHistoryItems: BillingHistoryItem[] = [];
+
   return (
     <main className="max-w-4xl mx-auto p-6 space-y-12">
       <Breadcrumbs
@@ -24,7 +24,7 @@ export default async function PlanPage() {
 
       <h1 className="text-2xl font-bold">プラン管理</h1>
 
-      {/* ★ここに購読ステータスカードを差し込み ★ */}
+      {/* 購読ステータス（status/current_plan_id/renews_at/payment_method） */}
       <PlanStatusCard />
 
       {/* 以降、既存の UI コンテンツ（例: プラン情報や履歴一覧） */}
