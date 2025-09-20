@@ -26,9 +26,13 @@ export default async function RootLayout({
   return (
     <html lang="ja">
       <body>
-        {/* ▼ ここからクライアント境界（AuthProviderもこの中で動く） */}
+        {/* ▼ ここからクライアント境界（AuthProvider もこの中で動く） */}
         <ClientRoot>
-          <div className="pageWrapper" data-ssr-logged-in={isLoggedIn ? "1" : "0"}>
+          <div
+            className="pageWrapper"
+            data-ssr-logged-in={isLoggedIn ? "1" : "0"}
+            data-app-build="auth-clientroot-v1"  // ★SSRマーカー（本番反映の見える化）
+          >
             <Header isLoggedIn={isLoggedIn} />
             <main className="mainContent">{children}</main>
             <div className="siteFooterSlot">
