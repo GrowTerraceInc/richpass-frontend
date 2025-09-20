@@ -21,6 +21,9 @@ html, body {
   flex: 1;
 }
 
+/* フッターの初期表示（必要時だけCSSで隠す） */
+.siteFooterSlot { display: block; }
+
 /* 追加：ボックスサイズの統一 */
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -69,6 +72,9 @@ html, body {
   /* ▼ 見出しスケール ▼ */
   --h2-size: clamp(22px, 2.4vw, 32px);
   --h3-size: clamp(18px, 2vw, 22px);
+
+  /* ▼ タブバー高さ（デザインに合わせて調整可） ▼ */
+  --tabbar-h: 72px;
 }
 
 /* 画面幅に応じてセクション余白を微調整 */
@@ -151,10 +157,8 @@ a:hover {
   margin: 0 0 10px;
 }
 
-/* タブバー高さ（デザインに合わせて調整可） */
-:root {
-  --tabbar-h: 72px;
-}
+/* 既存：タブバー高さ（エイリアス） */
+/* :root { --tabbar-h: 72px; }  ← すでに上で定義済み */
 
 /* タブが出ているページだけ、メイン下に余白＆フッター非表示（モバイルのみ） */
 @media (max-width: 768px) {
@@ -162,8 +166,16 @@ a:hover {
     padding-bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
   }
   body.has-tabbar .siteFooterSlot {
-    display: none;
+    display: none !important;
   }
-    /* モバイルでタブバーが出ているとき、ヘッダー内の通常ナビを隠す */
-  body.has-tabbar header nav { display: none !important; }
+
+  /* 追加：モバイルでタブバーがあるときはヘッダーの通常ナビを隠す */
+  body.has-tabbar header nav,
+  body.has-tabbar header [role="navigation"],
+  body.has-tabbar header [class*="nav"],
+  body.has-tabbar header [class*="Nav"],
+  body.has-tabbar header [class*="menu"],
+  body.has-tabbar header [class*="Menu"] {
+    display: none !important;
+  }
 }
