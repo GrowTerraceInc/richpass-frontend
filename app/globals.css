@@ -164,4 +164,6 @@ a:hover {
   body.has-tabbar .siteFooterSlot {
     display: none;
   }
+    /* モバイルでタブバーが出ているとき、ヘッダー内の通常ナビを隠す */
+  body.has-tabbar header nav { display: none !important; }
 }
