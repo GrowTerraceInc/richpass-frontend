@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import styles from './PlanPage.module.css';
 import LinkButton from '@/app/components/ui/LinkButton';
-import { getSubscriptionStatusApi } from '../../lib/billingClient';
+import { getSubscriptionStatusApi, type SubscriptionStatusApi } from '../../lib/billingClient';
 
 // 元UIの Plan 情報（page.tsx から渡す）
 type PlanLite = { planId: string; name: string };
@@ -29,11 +29,20 @@ function displayName(name: string, planId: string) {
   return 'FREE';
 }
 
-// Stripeのprice_id→アプリ内planIdへの解決（憶測禁止のため、envでのみ判定）
+// Stripeのprice_id→アプリ内planIdへの解決（ENVでのみ判定）
 function resolvePlanIdFromPriceId(currentPlanPriceId: string | null): 'free' | 'premium' | null {
   if (!currentPlanPriceId) return 'free'; // priceが無い＝FREE想定（課金中でない）
   if (PREMIUM_PRICE_IDS.includes(currentPlanPriceId)) return 'premium';
   return null; // マッピング不明→誤表記回避のためnull
+}
+
+// 安全に API レスポンスから plan を取り出す（any禁止対応）
+function readPlanField(obj: unknown): 'free' | 'premium' | string | undefined {
+  if (obj && typeof obj === 'object' && 'plan' in obj) {
+    const val = (obj as { plan?: unknown }).plan;
+    if (typeof val === 'string') return val;
+  }
+  return undefined;
 }
 
 export default function PlanCurrentCard({ plans }: { plans: PlanLite[] }) {
@@ -41,17 +50,19 @@ export default function PlanCurrentCard({ plans }: { plans: PlanLite[] }) {
   const [currentPriceId, setCurrentPriceId] = useState<string | null>(null);
   const [renewsAt, setRenewsAt] = useState<string | null>(null);
   const [last4, setLast4] = useState<string | null>(null);
+  const [planFromApi, setPlanFromApi] = useState<'free' | 'premium' | string | undefined>(undefined);
 
   useEffect(() => {
     let mounted = true;
     (async () => {
       try {
-        const j = await getSubscriptionStatusApi();
+        const j: SubscriptionStatusApi = await getSubscriptionStatusApi();
         if (!mounted) return;
         setStatus(j.status ?? '');
         setCurrentPriceId(j.current_plan_id ?? null);
         setRenewsAt(j.renews_at ?? null);
         setLast4(j.payment_method?.last4 ?? null);
+        setPlanFromApi(readPlanField(j)); // ★ 追加：APIのplanを最優先で使用
       } catch {
         // 失敗時は既定のまま
       }
@@ -61,13 +72,26 @@ export default function PlanCurrentCard({ plans }: { plans: PlanLite[] }) {
     };
   }, []);
 
-  // envマッピングで planId を解決し、元UIの表示名ルールに渡す
-  const resolvedPlanId = resolvePlanIdFromPriceId(currentPriceId); // 'free' | 'premium' | null
+  // 1) APIがplanを返していれば最優先
+  let resolvedPlanId: 'free' | 'premium' | null =
+    planFromApi === 'premium' ? 'premium'
+    : planFromApi === 'free' ? 'free'
+    : null;
+
+  // 2) APIにplanが無い/不明なら、ENVのprice_idマッピングでフォールバック
+  if (!resolvedPlanId) {
+    resolvedPlanId = resolvePlanIdFromPriceId(currentPriceId);
+  }
+
+  // 3) UI表示名（元UIのルールで最終決定）
   const resolvedPlan =
     resolvedPlanId ? plans.find((p) => p.planId === resolvedPlanId) ?? null : null;
 
   const planLabel = resolvedPlanId
-    ? displayName(resolvedPlan?.name ?? (resolvedPlanId === 'premium' ? 'PREMIUM' : 'FREE'), resolvedPlanId)
+    ? displayName(
+        resolvedPlan?.name ?? (resolvedPlanId === 'premium' ? 'PREMIUM' : 'FREE'),
+        resolvedPlanId
+      )
     : (currentPriceId ?? '-'); // マッピング不明時はprice文字列をそのまま（誤表記回避）
 
   return (
