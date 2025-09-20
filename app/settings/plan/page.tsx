@@ -1,44 +1,60 @@
 export const dynamic = 'force-dynamic';
 
-import { Suspense } from 'react';
-import Breadcrumbs from '@/app/components/breadcrumbs/Breadcrumbs';
-import LinkButton from '@/app/components/ui/LinkButton';
-import styles from './PlanPage.module.css';
-import BillingHistoryList from '@/app/components/billing/BillingHistoryList';
-import type { BillingHistoryItem } from '@/app/lib/billing';
+import Breadcrumbs from "@/app/components/breadcrumbs/Breadcrumbs";
+import styles from "./PlanPage.module.css";
+import { loadPlans, loadBillingHistory } from "@/app/lib/billing";
+import BillingHistoryList from "@/app/components/billing/BillingHistoryList";
+import PlanCurrentCard from "./PlanCurrentCard";
 
-// ←★ dynamicは使わず、静的importに変更（Server Component内でssr:false禁止エラーの回避）
-import PlanStatusCard from './PlanStatusCard';
+// 元UIの型に合わせた最小情報だけをPlanCurrentCardへ渡す
+type PlanLite = { planId: string; name: string };
+type PlanFromApi = { planId: string; name: string } & Record<string, unknown>;
 
-export default function PlanPage() {
-  const emptyHistoryItems: BillingHistoryItem[] = [];
+export default async function PlanPage() {
+  // 元の構造どおり SSR で取得（UIはそのまま）
+  const [plans, history] = await Promise.all([
+    loadPlans(),
+    loadBillingHistory(),
+  ]);
+
+  // any禁止対応：型を安全に絞って変換
+  const plansArray = Array.isArray(plans) ? plans : [];
+  const plansLite: PlanLite[] = (plansArray as PlanFromApi[]).map((p) => ({
+    planId: String(p.planId),
+    name: String(p.name),
+  }));
 
   return (
-    <main className="max-w-4xl mx-auto p-6 space-y-12">
-      <Breadcrumbs
-        items={[
-          { href: '/settings', label: '設定' },
-          { href: '/settings/plan', label: 'プラン管理' },
-        ]}
-      />
+    <main className="container">
+      <div className="header">
+        <Breadcrumbs
+          items={[
+            { label: "マイページ", href: "/mypage" },
+            { label: "プラン管理", href: "/settings/plan" },
+          ]}
+        />
+      </div>
 
-      <h1 className="text-2xl font-bold">プラン管理</h1>
+      <div className={styles.header}>
+        <h1 className={styles.title}>プラン管理</h1>
+      </div>
 
-      {/* 購読ステータス（status/current_plan_id/renews_at/payment_method） */}
-      <PlanStatusCard />
+      <div className={styles.wrap}>
+        {/* 現在のプランカードのみ、クライアント側で実データに差し替え（見た目は元UIのまま） */}
+        <PlanCurrentCard plans={plansLite} />
 
-      {/* 以降、既存の UI コンテンツ（例: プラン情報や履歴一覧） */}
-      <section className={styles.section}>
-        <h2 className="text-xl font-semibold">お支払い履歴</h2>
-        <Suspense fallback={<div>読み込み中…</div>}>
-          <BillingHistoryList items={emptyHistoryItems} />
-        </Suspense>
-      </section>
+        {/* 履歴は従来どおり。API未実装でも既存モックがあれば表示維持 */}
+        <section className={styles.historyCard}>
+          <h2 className={styles.h2}>お支払い履歴</h2>
+          <BillingHistoryList items={history} initialCount={12} step={12} />
+          <div className={styles.colMuted} style={{ marginTop: 6 }}>
+            ※ 領収書リンクはモックです。Stripe連携後は各請求（Invoice）のPDF/Hosted Invoice URLを表示します。
+          </div>
+        </section>
 
-      <div className="flex justify-end">
-        <LinkButton href="/settings" variant="secondary">
-          設定に戻る
-        </LinkButton>
+        <div style={{ color: "var(--color-gray-600)", fontSize: 13 }}>
+          ※ 現在はモック表示です。Stripe連携後に「プランを変更」からチェックアウト/ポータルへ遷移します。
+        </div>
       </div>
     </main>
   );
