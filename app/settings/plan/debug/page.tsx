@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getSubscriptionStatusApi, type SubscriptionStatusApi } from '@/app/lib/billingClient';
+import { getSubscriptionStatusApi, type SubscriptionStatusApi } from '../../../lib/billingClient';
 
 export default function PlanDebugPage() {
   const [data, setData] = useState<SubscriptionStatusApi | null>(null);
