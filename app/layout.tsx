@@ -7,7 +7,7 @@ import Footer from "./components/layout/Footer";
 import MobileTabBar from "@/app/components/tabbar/MobileTabBar";
 /* ▼ サーバーでログイン検知（既存） */
 import { getSession } from "@/app/lib/auth";
-/* ▼ 追加：クライアント境界 */
+/* ▼ クライアント境界（既存） */
 import ClientRoot from "@/app/components/auth/ClientRoot";
 
 export const metadata: Metadata = {
@@ -31,7 +31,7 @@ export default async function RootLayout({
           <div
             className="pageWrapper"
             data-ssr-logged-in={isLoggedIn ? "1" : "0"}
-            data-app-build="auth-clientroot-v1"  // ★SSRマーカー（本番反映の見える化）
+            data-app-build="auth-clientroot-v2"  // ★SSRマーカー（v2）
           >
             <Header isLoggedIn={isLoggedIn} />
             <main className="mainContent">{children}</main>
