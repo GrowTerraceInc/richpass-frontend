@@ -98,9 +98,7 @@ body {
 
 /* PC表示では、基本フォントサイズを少し大きくする */
 @media (min-width: 1024px) {
-  body {
-    font-size: 18px;
-  }
+  body { font-size: 18px; }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -109,23 +107,15 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.5;
 }
 
-a {
-  color: var(--color-primary-500);
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-  color: var(--color-primary-600);
-}
+a { color: var(--color-primary-500); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--color-primary-600); }
 
 /* -----------------------------------------
    4. 共通ユーティリティ（新設）
    ----------------------------------------- */
 
 /* セクション外側余白（上下） */
-.section {
-  padding-block: var(--section-py);
-}
+.section { padding-block: var(--section-py); }
 
 /* 横幅コンテナ */
 .container {
@@ -157,25 +147,40 @@ a:hover {
   margin: 0 0 10px;
 }
 
-/* 既存：タブバー高さ（エイリアス） */
-/* :root { --tabbar-h: 72px; }  ← すでに上で定義済み */
+/* -----------------------------------------
+   5. ボトムナビ連動（被り回避／上部ナビ非表示／フッター制御）
+   ----------------------------------------- */
 
-/* タブが出ているページだけ、メイン下に余白＆フッター非表示（モバイルのみ） */
+/* フッターは基本表示（明示） */
+.siteFooterSlot { display: block; }
+
+/* モバイル時に「ボトムナビがある」ときだけ適用（2系統で検知） */
 @media (max-width: 768px) {
+  /* A) JS が付ける body.has-tabbar で制御 */
+  body.has-tabbar .siteFooterSlot { display: none !important; }
   body.has-tabbar .mainContent {
-    padding-bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+    padding-bottom: calc(var(--tabbar-h, 72px) + env(safe-area-inset-bottom));
   }
-  body.has-tabbar .siteFooterSlot {
-    display: none !important;
-  }
-
-  /* 追加：モバイルでタブバーがあるときはヘッダーの通常ナビを隠す */
   body.has-tabbar header nav,
   body.has-tabbar header [role="navigation"],
   body.has-tabbar header [class*="nav"],
   body.has-tabbar header [class*="Nav"],
   body.has-tabbar header [class*="menu"],
   body.has-tabbar header [class*="Menu"] {
+    display: none !important;
+  }
+
+  /* B) 予備：DOMに #rp-bottom-nav が存在する場合も同等に効かせる */
+  body:has(#rp-bottom-nav) .siteFooterSlot { display: none !important; }
+  body:has(#rp-bottom-nav) .mainContent {
+    padding-bottom: calc(var(--tabbar-h, 72px) + env(safe-area-inset-bottom));
+  }
+  body:has(#rp-bottom-nav) header nav,
+  body:has(#rp-bottom-nav) header [role="navigation"],
+  body:has(#rp-bottom-nav) header [class*="nav"],
+  body:has(#rp-bottom-nav) header [class*="Nav"],
+  body:has(#rp-bottom-nav) header [class*="menu"],
+  body:has(#rp-bottom-nav) header [class*="Menu"] {
     display: none !important;
   }
 }

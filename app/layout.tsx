@@ -1,11 +1,9 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
-/* ▼ サーバーでログイン検知（既存） */
+import Footer from "./components/layout/Footer";
 import { getSession } from "@/app/lib/auth";
-/* ▼ クライアント境界（既存） */
 import ClientRoot from "@/app/components/auth/ClientRoot";
-/* ▼ 追加：ログイン/未ログインでナビを切替 */
 import SmartChrome from "@/app/components/layout/SmartChrome";
 
 export const metadata: Metadata = {
@@ -15,9 +13,7 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+}: { children: React.ReactNode }) {
   const session = await getSession();
   const isLoggedIn = !!session;
 
@@ -26,10 +22,16 @@ export default async function RootLayout({
       <body>
         <ClientRoot>
           <div className="pageWrapper">
-            {/* ▼ ログイン/未ログインでヘッダー/ボトムナビ/フッターを出し分け */}
+            {/* ヘッダー＆（必要なら）ボトムナビ */}
             <SmartChrome />
 
+            {/* 本文エリアは伸縮してフッターを最下部へ押し下げる */}
             <main className="mainContent">{children}</main>
+
+            {/* フッターは常に末尾。ただし CSS で「ボトムナビがある時は非表示」 */}
+            <div className="siteFooterSlot">
+              <Footer />
+            </div>
           </div>
         </ClientRoot>
       </body>
