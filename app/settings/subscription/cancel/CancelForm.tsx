@@ -6,6 +6,10 @@ import Toggle from "@/app/components/ui/Toggle";
 import Button from "@/app/components/ui/Button";
 import LinkButton from "@/app/components/ui/LinkButton";
 import styles from "./CancelPage.module.css";
+import { csrfCookie } from "@/app/lib/authClient"; // ★追加：Sanctum CSRF
+import { getSubscriptionStatusApi } from "@/app/lib/billingClient"; // 成功後の再取得に使用
+
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE!;
 
 type Props = {
   renewsAt?: string; // 期間末日（ISO）; 期間末解約の説明に使用
@@ -15,6 +19,17 @@ function formatYmd(iso?: string) {
   if (!iso) return "-";
   const d = new Date(iso);
   return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+}
+
+function getXsrfFromCookie(): string | null {
+  if (typeof document === "undefined") return null;
+  const raw = document.cookie.split("; ").find((s) => s.startsWith("XSRF-TOKEN="));
+  if (!raw) return null;
+  try {
+    return decodeURIComponent(raw.split("=")[1] ?? "");
+  } catch {
+    return raw.split("=")[1] ?? null;
+  }
 }
 
 export default function CancelForm({ renewsAt }: Props) {
@@ -28,6 +43,7 @@ export default function CancelForm({ renewsAt }: Props) {
   // 同意は必須のまま
   const [agreed, setAgreed] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
 
   const reasonOptions = [
     { value: "price", label: "料金が高い" },
@@ -42,29 +58,58 @@ export default function CancelForm({ renewsAt }: Props) {
     );
   };
 
-  // 理由は任意なので、送信可否は同意と処理中のみで判定
   const canSubmit = !saving && agreed;
 
   const proceed = async (payloadReasons: string[], payloadDetails?: string) => {
     setSaving(true);
+    setErr(null);
     try {
-      const res = await fetch("/api/subscription/cancel", {
+      // 1) CSRF cookie（Sanctum）
+      const c = await csrfCookie();
+      if (![200, 204].includes(c)) throw new Error(`CSRF failed: ${c}`);
+      const xsrf = getXsrfFromCookie();
+      if (!xsrf) throw new Error("CSRF token missing");
+
+      // 2) 解約API（APIドメインへ、Cookie送信＋XSRFヘッダ付き）
+      const res = await fetch(`${API_BASE}/api/subscription/cancel`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "X-XSRF-TOKEN": xsrf,
+        },
         body: JSON.stringify({
-          atPeriodEnd,
-          reasons: payloadReasons, // 複数理由（任意）
-          details: payloadDetails, // その他の自由記述（任意）
+          atPeriodEnd,            // 期間末解約 or 即時解約（バック側が対応すれば利用）
+          reasons: payloadReasons, // 任意
+          details: payloadDetails, // 任意
         }),
       });
-      if (!res.ok) throw new Error("cancel-failed");
-      const q = new URLSearchParams({
-        at: atPeriodEnd ? "end" : "now",
-        renew: renewsAt ?? "",
-      }).toString();
+      if (!res.ok) {
+        let msg = `cancel failed: ${res.status}`;
+        try {
+          const j = await res.json();
+          if (typeof j?.error === "string") msg = j.error;
+        } catch {}
+        throw new Error(msg);
+      }
+
+      // 3) 成功後のリダイレクト（/status を再取得して at/end or now を判断）
+      let at: "end" | "now" = atPeriodEnd ? "end" : "now";
+      let renew = renewsAt ?? "";
+      try {
+        const s = await getSubscriptionStatusApi();
+        // 直ちにキャンセル済みなら now、期間末なら end に寄せる
+        const st = String(s.status || "").toLowerCase();
+        if (st === "canceled") at = "now";
+        if (s.renews_at) renew = s.renews_at;
+      } catch {
+        // 取得失敗時はフォームの選択値で遷移
+      }
+
+      const q = new URLSearchParams({ at, renew }).toString();
       router.push(`/settings/subscription/cancel/success?${q}`);
-    } catch {
-      alert("解約手続きに失敗しました。時間をおいて再度お試しください。");
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "cancel error");
       setSaving(false);
     }
   };
@@ -152,6 +197,13 @@ export default function CancelForm({ renewsAt }: Props) {
           利用できなくなります。
         </div>
       </section>
+
+      {/* エラー表示（あれば） */}
+      {err && (
+        <div className={`${styles.note} ${styles.center}`} style={{ color: "#c00" }}>
+          {err}
+        </div>
+      )}
 
       {/* アクション（中央寄せ） */}
       <div className={styles.actions}>
