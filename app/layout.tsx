@@ -5,8 +5,10 @@ import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 /* ▼ モバイルタブ */
 import MobileTabBar from "@/app/components/tabbar/MobileTabBar";
-/* ▼ 追加：ログイン検知ヘルパー */
+/* ▼ サーバーでログイン検知（既存） */
 import { getSession } from "@/app/lib/auth";
+/* ▼ クライアント境界（既存） */
+import ClientRoot from "@/app/components/auth/ClientRoot";
 
 export const metadata: Metadata = {
   title: "Richpass",
@@ -18,25 +20,26 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // サーバーでログイン検知（既存の見た目は維持）
   const session = await getSession();
   const isLoggedIn = !!session;
 
   return (
-    <html lang="ja">
+    <html lang="ja" data-app-build="auth-clientroot-v3">{/* ★SSRマーカー（<html>直付け） */}
       <body>
-        <div className="pageWrapper">
-          {/* ログイン状態はここで制御可能 */}
-          <Header isLoggedIn={isLoggedIn} />
-          <main className="mainContent">{children}</main>
-          {/* ▼ タブ表示中はCSSで非表示にするためのスロット */}
-          <div className="siteFooterSlot">
-            <Footer />
+        {/* ▼ ここからクライアント境界（AuthProvider もこの中で動く） */}
+        <ClientRoot>
+          <div
+            className="pageWrapper"
+            data-ssr-logged-in={isLoggedIn ? "1" : "0"}
+          >
+            <Header isLoggedIn={isLoggedIn} />
+            <main className="mainContent">{children}</main>
+            <div className="siteFooterSlot">
+              <Footer />
+            </div>
           </div>
-        </div>
-
-        {/* ▼ モバイル専用の下部タブ（PCでは非表示） */}
-        <MobileTabBar isLoggedIn={isLoggedIn} />
+          <MobileTabBar isLoggedIn={isLoggedIn} />
+        </ClientRoot>
       </body>
     </html>
   );
