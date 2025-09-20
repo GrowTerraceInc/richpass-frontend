@@ -6,10 +6,8 @@ import styles from './PlanPage.module.css';
 import LinkButton from '@/app/components/ui/LinkButton';
 import { getSubscriptionStatusApi, type SubscriptionStatusApi } from '../../lib/billingClient';
 
-// 元UIの Plan 情報（page.tsx から渡す）
 type PlanLite = { planId: string; name: string };
 
-// env: PREMIUMのStripe価格IDをカンマ区切りで設定（例）NEXT_PUBLIC_PREMIUM_PRICE_IDS=price_XXXX,price_YYYY
 const PREMIUM_PRICE_IDS: string[] = (process.env.NEXT_PUBLIC_PREMIUM_PRICE_IDS ?? '')
   .split(',')
   .map((s) => s.trim())
@@ -22,21 +20,18 @@ function formatDateYmd(iso?: string | null) {
   return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
 }
 
-// 元UIの表記ルールを踏襲
 function displayName(name: string, planId: string) {
   if (planId.toLowerCase() === 'pro' || name.toUpperCase() === 'PRO') return 'PREMIUM';
   if (planId.toLowerCase() === 'premium') return 'PREMIUM';
   return 'FREE';
 }
 
-// Stripeのprice_id→アプリ内planIdへの解決（ENVでのみ判定）
 function resolvePlanIdFromPriceId(currentPlanPriceId: string | null): 'free' | 'premium' | null {
-  if (!currentPlanPriceId) return 'free'; // priceが無い＝FREE想定（課金中でない）
+  if (!currentPlanPriceId) return 'free';
   if (PREMIUM_PRICE_IDS.includes(currentPlanPriceId)) return 'premium';
-  return null; // マッピング不明→誤表記回避のためnull
+  return null;
 }
 
-// 安全に API レスポンスから plan を取り出す（any禁止対応）
 function readPlanField(obj: unknown): 'free' | 'premium' | string | undefined {
   if (obj && typeof obj === 'object' && 'plan' in obj) {
     const val = (obj as { plan?: unknown }).plan;
@@ -62,9 +57,9 @@ export default function PlanCurrentCard({ plans }: { plans: PlanLite[] }) {
         setCurrentPriceId(j.current_plan_id ?? null);
         setRenewsAt(j.renews_at ?? null);
         setLast4(j.payment_method?.last4 ?? null);
-        setPlanFromApi(readPlanField(j)); // APIのplanを最優先で使用
+        setPlanFromApi(readPlanField(j));
       } catch {
-        // 失敗時は既定のまま
+        // noop
       }
     })();
     return () => {
@@ -72,7 +67,7 @@ export default function PlanCurrentCard({ plans }: { plans: PlanLite[] }) {
     };
   }, []);
 
-  // ★ 1) 即時解約なら強制FREE
+  // 1) 即時解約なら強制FREE（表記もFREEに寄せる）
   let resolvedPlanId: 'free' | 'premium' | null =
     status === 'canceled'
       ? 'free'
@@ -82,12 +77,11 @@ export default function PlanCurrentCard({ plans }: { plans: PlanLite[] }) {
       ? 'free'
       : null;
 
-  // 2) APIにplanが無い/不明なら、ENVのprice_idマッピングでフォールバック
+  // 2) planが不明ならENVのprice_idマッピングでフォールバック
   if (!resolvedPlanId) {
     resolvedPlanId = resolvePlanIdFromPriceId(currentPriceId);
   }
 
-  // 3) UI表示名（元UIのルールで最終決定）
   const resolvedPlan =
     resolvedPlanId ? plans.find((p) => p.planId === resolvedPlanId) ?? null : null;
 
@@ -96,7 +90,7 @@ export default function PlanCurrentCard({ plans }: { plans: PlanLite[] }) {
         resolvedPlan?.name ?? (resolvedPlanId === 'premium' ? 'PREMIUM' : 'FREE'),
         resolvedPlanId
       )
-    : (currentPriceId ?? '-'); // マッピング不明時はprice文字列をそのまま（誤表記回避）
+    : (currentPriceId ?? '-');
 
   return (
     <section className={styles.currentCard}>
@@ -105,13 +99,16 @@ export default function PlanCurrentCard({ plans }: { plans: PlanLite[] }) {
         <div className={styles.value}>
           {planLabel}
           {status === 'past_due' ? '（お支払い要確認）' : ''}
-          {status === 'canceled' ? '（解約済み）' : ''}
+          {/* （解約済み）の表記は混乱防止のため削除 */}
         </div>
       </div>
 
       <div className={styles.row}>
         <div className={styles.label}>更新日</div>
-        <div className={styles.value}>{formatDateYmd(renewsAt)}</div>
+        <div className={styles.value}>
+          {/* 即時解約時は日付を出さず “-” 表示 */}
+          {status === 'canceled' ? '-' : formatDateYmd(renewsAt)}
+        </div>
       </div>
 
       <div className={styles.row}>
