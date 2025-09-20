@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { AuthBoundary } from '@/app/components/auth/AuthBoundary';
+import { AuthBoundary } from '../../components/auth/AuthBoundary';
 
 export default function Page() {
   return (
