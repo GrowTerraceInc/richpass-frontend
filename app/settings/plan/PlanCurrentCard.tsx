@@ -62,7 +62,7 @@ export default function PlanCurrentCard({ plans }: { plans: PlanLite[] }) {
         setCurrentPriceId(j.current_plan_id ?? null);
         setRenewsAt(j.renews_at ?? null);
         setLast4(j.payment_method?.last4 ?? null);
-        setPlanFromApi(readPlanField(j)); // ★ 追加：APIのplanを最優先で使用
+        setPlanFromApi(readPlanField(j)); // APIのplanを最優先で使用
       } catch {
         // 失敗時は既定のまま
       }
@@ -72,11 +72,15 @@ export default function PlanCurrentCard({ plans }: { plans: PlanLite[] }) {
     };
   }, []);
 
-  // 1) APIがplanを返していれば最優先
+  // ★ 1) 即時解約なら強制FREE
   let resolvedPlanId: 'free' | 'premium' | null =
-    planFromApi === 'premium' ? 'premium'
-    : planFromApi === 'free' ? 'free'
-    : null;
+    status === 'canceled'
+      ? 'free'
+      : planFromApi === 'premium'
+      ? 'premium'
+      : planFromApi === 'free'
+      ? 'free'
+      : null;
 
   // 2) APIにplanが無い/不明なら、ENVのprice_idマッピングでフォールバック
   if (!resolvedPlanId) {
