@@ -1,0 +1,91 @@
+/* 旧UIのまま。必要な箇所は globals のトークンを参照。:root は使わない */
+
+.container { max-width: 1080px; margin: 0 auto; padding: 16px; }
+.grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+@media (min-width: 1024px) { .grid { grid-template-columns: 1fr 320px; align-items: start; } }
+.main { display: grid; gap: 20px; }
+.sidebar { display: grid; gap: 16px; }
+
+/* Soft card（淡いグレー背景+内側で区切りライン） */
+.softCard { background: #f7f8fa; border: none; box-shadow: none; border-radius: 16px; padding: 16px; }
+.softCardList { background: #f7f8fa; border-radius: 16px; padding: 8px 0; }
+
+/* User Card */
+.userHeader { display: flex; align-items: center; justify-content: space-between; }
+.userMeta { display: flex; gap: 12px; align-items: center; }
+.avatarWrap { width: 48px; height: 48px; border-radius: 9999px; overflow: hidden; }
+.avatar { border-radius: 9999px; object-fit: cover; }
+.userName { font-size: 18px; font-weight: 800; color: #111827; }
+.level { font-size: 14px; color: #6b7280; margin-left: 6px; }
+
+/* XP bar */
+.xpBarOuter { height: 8px; background: #e5e7eb; border-radius: 9999px; margin: 12px 0; overflow: hidden; }
+.xpBarInner { height: 100%; background: #f59e0b; border-radius: 9999px; }
+
+/* KPIs */
+.kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 8px 0 0; padding: 0; list-style: none; }
+.kpiItem { text-align: center; }
+.kpiNum { font-size: 28px; font-weight: 900; color: #111827; line-height: 1.1; }
+.kpiLabel { color: #6b7280; font-size: 12px; }
+
+/* Section titles */
+.sectionTitle { font-size: 18px; font-weight: 800; color: #111827; margin: 8px 0 -4px; }
+
+/* Studying Lesson */
+.lessonCard { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; }
+.lessonIcon { width: 35px; height: 35px; border-radius: 8px; display: grid; place-items: center; background: #fff; }
+.iconImg { object-fit: contain; }
+.lessonBody { display: grid; gap: 6px; }
+.lessonBadge { color: #6b7280; font-weight: 700; font-size: 12px; }
+.lessonTitle { font-weight: 800; color: #111827; }
+.lessonInfo { font-size: 12px; color: #9ca3af; margin-left: 4px; }
+.progressOuter { height: 8px; background: #e5e7eb; border-radius: 9999px; overflow: hidden; }
+.progressInner { height: 100%; background: #34d399; border-radius: 9999px; }
+.lessonCta { white-space: nowrap; }
+
+/* Lists (Review / Bookmarks) */
+.listStack { display: grid; gap: 0; }
+.itemRow { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; padding: 12px 14px; }
+.rowDivider { border-top: 1px solid #e5e7eb; }
+.itemIcon { width: 35px; height: 35px; border-radius: 8px; display: grid; place-items: center; background: #fff; }
+.itemBody { display: grid; gap: 2px; }
+.itemBadge { color: #9ca3af; font-weight: 700; font-size: 12px; }
+.itemTitle { font-weight: 800; color: #111827; }
+.itemCta { white-space: nowrap; }
+
+/* Sidebar cards */
+.cardTitle { font-weight: 800; color: #111827; margin-bottom: 8px; }
+
+/* Calendar */
+.calendar { display: grid; gap: 8px; }
+.weekRow { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.weekCell { text-align: center; font-size: 12px; color: #6b7280; }
+.dayGrid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.dayCell { height: 30px; display: grid; place-items: center; font-size: 12px; border-radius: 8px; color: #111827; background: #fff; }
+.dayHit { background: #fff7ed; border: 1px solid #fdba74; }
+/* モバイルでは14日だけ表示。PCでは1ヶ月分表示 */
+.dayHideMobile { display: none; }
+@media (min-width: 1024px) { .dayHideMobile { display: grid; } }
+
+/* Activity */
+.activityList { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+.activityItem { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: center; padding: 10px 0; }
+.activityAvatar { border-radius: 9999px; object-fit: cover; }
+.activityText { color: #111827; font-size: 14px; line-height: 1.5; }
+.activityName { font-weight: 800; }
+
+/* 空ルールの警告回避（見た目は変えない） */
+.userCard { outline: none; }
+.card { outline: none; }
+
+/* ===== Mobile compaction ===== */
+@media (max-width: 480px) {
+  .compactBtn { font-size: 14px !important; line-height: 1 !important; padding: 8px 12px !important; border-radius: 9999px !important; }
+  .lessonCard { grid-template-columns: auto 1fr auto; gap: 8px; padding: 12px; }
+  .itemRow { grid-template-columns: auto 1fr auto; gap: 8px; padding: 10px 12px; }
+  .lessonIcon, .itemIcon { width: 35px; height: 35px; }
+  .lessonBody { gap: 4px; }
+  .progressOuter { height: 6px; }
+  .userName { font-size: 16px; }
+  .kpiNum { font-size: 24px; }
+}

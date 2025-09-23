@@ -1,0 +1,44 @@
+/* globals.css のトークンを直接参照（:root は使わない） */
+.field{ margin-bottom: 16px; }
+
+.label{
+  display:block;
+  font-weight:800;
+  color: var(--color-gray-900);
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+
+.input{
+  width:100%;
+  height: 48px;
+  border-radius: 12px;
+  border:1px solid var(--color-gray-200);
+  background: var(--color-white);
+  padding: 0 14px;
+  font-size: 16px;
+  color: var(--color-gray-900);
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.input:focus{
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-500) 25%, transparent);
+}
+
+.input[aria-invalid="true"]{
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px color-mix(in srgb, #ef4444 25%, transparent);
+}
+
+/* フォーム内の横並び要素や区切り */
+.actions{ margin-top: 8px; display:flex; justify-content:center; }
+.separator{ position: relative; margin: 24px 0; height: 1px; background: var(--color-gray-200); }
+.oauthStack{ display:grid; gap: 12px; }
+.bottomNote{ margin-top: 12px; text-align: center; color: var(--color-gray-600); font-size: 14px; }
+.link{ color: var(--color-primary-500); text-decoration: underline; text-underline-offset: 3px; }
+
+/* 右寄せの「パスワードを忘れた場合」 */
+.forgotRow{ display:flex; justify-content:flex-end; margin: 6px 0 0; }
+.forgotLink{ color: var(--color-primary-500); font-size: 13px; }

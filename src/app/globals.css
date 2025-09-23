@@ -1,26 +1,176 @@
+/* Tailwind v4 を最初に読み込む（Base/Components/Utilities を展開） */
 @import "tailwindcss";
 
+/* -----------------------------------------
+   1. リセット & 基本レイアウト（旧仕様を踏襲）
+   ----------------------------------------- */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* Sticky Footer 用のラッパー */
+.pageWrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* メインコンテンツ（Sticky Footer用） */
+.mainContent { flex: 1; }
+
+/* 追加：ボックスサイズの統一 */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* -----------------------------------------
+   2. デザインシステム：CSSカスタムプロパティ
+   （旧の変数を集約／名前はそのまま）
+   ----------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* 表示モードのヒント（必要に応じてdark対応は別途） */
+  color-scheme: light;
+
+  /* ▼ カラー ▼ */
+  /* プライマリ（ブランドカラー） */
+  --color-primary-500: #F39C12;
+  --color-primary-600: #E67E22;
+  --color-primary-100: #fffaf0;
+
+  /* ニュートラル（基本色） */
+  --color-gray-900: #333333;
+  --color-gray-600: #555555;
+  --color-gray-400: #777777;
+  --color-gray-200: #dddddd;
+  --color-gray-100: #eeeeee;
+  --color-gray-50:  #f9f9f9;
+  --color-white:     #FFFFFF;
+
+  /* システムカラー */
+  --color-success: #2ECC71;
+  --color-error:   #E74C3C;
+  --color-info:    #1DA1F2;
+
+  /* ▼ スペーシング（余白） ▼ */
+  --space-xs: 4px;
+  --space-s:  8px;
+  --space-m:  16px;
+  --space-l:  24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  /* ▼ コンテナ幅 ▼ */
+  --container-sm: 760px;
+  --container-md: 960px;
+  --container-lg: 1200px;
+
+  /* ▼ セクション上下余白（デフォ） ▼ */
+  --section-py:   64px;
+  --section-py-sm: 56px;
+  --section-py-lg: 80px;
+
+  /* ▼ 見出しスケール ▼ */
+  --h2-size: clamp(22px, 2.4vw, 32px);
+  --h3-size: clamp(18px, 2vw, 22px);
+
+  /* ▼ タブバー高さ（モバイルUI用） ▼ */
+  --tabbar-h: 72px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* 画面幅に応じてセクション余白を微調整 */
+@media (max-width: 480px) {
+  :root { --section-py: var(--section-py-sm); }
+}
+@media (min-width: 1024px) {
+  :root { --section-py: var(--section-py-lg); }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* -----------------------------------------
+   3. 基本タグのスタイル（旧仕様を踏襲）
+   ----------------------------------------- */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Noto Sans JP', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+               Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji','Segoe UI Emoji',
+               'Segoe UI Symbol', sans-serif;
+  color: var(--color-gray-900);
+  background-color: var(--color-white);
+  line-height: 1.8;
+  font-size: 16px; /* モバイルの基本フォントサイズ */
+}
+
+/* PC表示では、基本フォントサイズをやや大きく */
+@media (min-width: 1024px) {
+  body { font-size: 18px; }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-gray-900);
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+a {
+  color: var(--color-primary-500);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+  color: var(--color-primary-600);
+}
+
+/* -----------------------------------------
+   4. 共通ユーティリティ（旧仕様を踏襲）
+   ----------------------------------------- */
+
+/* セクション外側余白（上下） */
+.section { padding-block: var(--section-py); }
+
+/* 横幅コンテナ */
+.container {
+  width: 100%;
+  max-width: var(--container-lg);
+  margin-inline: auto;
+  padding-inline: 16px;
+}
+.container--md { max-width: var(--container-md); }
+.container--sm { max-width: var(--container-sm); }
+
+/* 背景のエイリアス */
+.bg-white     { background: var(--color-white); }
+.bg-gray-50   { background: var(--color-gray-50); }
+.bg-brand-100 { background: var(--color-primary-100); }
+
+/* ブランド色のエイリアス（@theme を使わない版） */
+.text-brand-500 { color: var(--color-primary-500); }
+.text-brand-600 { color: var(--color-primary-600); }
+
+.bg-brand-500 { background-color: var(--color-primary-500); }
+.bg-brand-600 { background-color: var(--color-primary-600); }
+
+.border-brand-500 { border-color: var(--color-primary-500); }
+.border-brand-600 { border-color: var(--color-primary-600); }
+
+/* 見出しの共通トーン */
+.h2 {
+  font-size: var(--h2-size);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: #0f172a;
+  margin: 0 0 32px;
+}
+.h3 {
+  font-size: var(--h3-size);
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 10px;
+}
+
+/* タブが出ているページのフッター回り（モバイル） */
+@media (max-width: 768px) {
+  body.has-tabbar .mainContent {
+    padding-bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+  }
+  body.has-tabbar .siteFooterSlot {
+    display: none;
+  }
 }
