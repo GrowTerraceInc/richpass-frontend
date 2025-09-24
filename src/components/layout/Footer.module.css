@@ -1,0 +1,20 @@
+.footer {
+  background-color: var(--color-footer-bg, #333);
+  color: var(--color-footer-fg, #fff);
+  padding: 15px 0;
+  text-align: center;
+}
+
+.navLink {
+  margin: 0 10px;
+  color: var(--color-footer-fg, #fff);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+.navLink:hover { color: var(--color-primary-500, #f39c12); }
+
+.copyright {
+  color: var(--color-text-muted, #aaa);
+  font-size: 14px;
+}

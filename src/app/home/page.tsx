@@ -7,47 +7,36 @@ import { useAuth } from '@/lib/useAuth';
 import HomeScreen from './components/HomeScreen';
 
 export default function HomePage() {
-  const { user, loading, refresh, doLogout } = useAuth();
+  const { user, loading, refresh, } = useAuth();
   const [retriedOnce, setRetriedOnce] = useState(false);
   const router = useRouter();
 
+  // ガード：初回だけ refresh を挟んでから判断（Cookieレース吸収）
   useEffect(() => {
-    // まだ /api/me の評価中
-    if (loading) return;
+    if (loading) return;        // /api/me 評価中
+    if (user) return;           // 認証済みなら何もしない
 
-    // 認証済みなら表示
-    if (user) return;
-
-    // 初回だけ /api/me を明示再同期（Cookie伝播のレース吸収）
     if (!retriedOnce) {
       setRetriedOnce(true);
       void refresh();
       return;
     }
-
-    // それでも未ログインなら /login へ
     router.replace('/login');
   }, [loading, user, refresh, retriedOnce, router]);
 
-  if (loading) return <p className="p-6">読み込み中…</p>;
-  if (!user) return null; // 上の useEffect が遷移を担当
-
+  // ★ ここで常に home-root を返す（中身だけ切り替える）
   return (
-    <>
-      <HomeScreen />
-      {/* E2E 用の安定導線（任意） */}
-      <div className="container container--sm py-4">
-        <button
-          data-testid="logout-btn"
-          onClick={async () => {
-            await doLogout();
-            router.replace('/login');
-          }}
-          className="mt-6 px-4 py-2 rounded-lg bg-[var(--color-gray-900)] text-white"
-        >
-          ログアウト
-        </button>
-      </div>
-    </>
+    <section data-testid="home-root">
+      {loading ? (
+        <p className="p-6">読み込み中…</p>
+      ) : user ? (
+        <>
+          <HomeScreen />
+        </>
+      ) : (
+        // ここはリダイレクトまでの一瞬だけ表示される
+        <p className="p-6">リダイレクト中…</p>
+      )}
+    </section>
   );
 }

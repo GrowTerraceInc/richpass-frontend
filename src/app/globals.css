@@ -28,16 +28,13 @@ html, body {
    （旧の変数を集約／名前はそのまま）
    ----------------------------------------- */
 :root {
-  /* 表示モードのヒント（必要に応じてdark対応は別途） */
   color-scheme: light;
 
   /* ▼ カラー ▼ */
-  /* プライマリ（ブランドカラー） */
   --color-primary-500: #F39C12;
   --color-primary-600: #E67E22;
   --color-primary-100: #fffaf0;
 
-  /* ニュートラル（基本色） */
   --color-gray-900: #333333;
   --color-gray-600: #555555;
   --color-gray-400: #777777;
@@ -46,7 +43,6 @@ html, body {
   --color-gray-50:  #f9f9f9;
   --color-white:     #FFFFFF;
 
-  /* システムカラー */
   --color-success: #2ECC71;
   --color-error:   #E74C3C;
   --color-info:    #1DA1F2;
@@ -95,7 +91,7 @@ body {
   color: var(--color-gray-900);
   background-color: var(--color-white);
   line-height: 1.8;
-  font-size: 16px; /* モバイルの基本フォントサイズ */
+  font-size: 16px;
 }
 
 /* PC表示では、基本フォントサイズをやや大きく */
@@ -140,7 +136,7 @@ a:hover {
 .bg-gray-50   { background: var(--color-gray-50); }
 .bg-brand-100 { background: var(--color-primary-100); }
 
-/* ブランド色のエイリアス（@theme を使わない版） */
+/* ブランド色のエイリアス */
 .text-brand-500 { color: var(--color-primary-500); }
 .text-brand-600 { color: var(--color-primary-600); }
 
@@ -171,6 +167,22 @@ a:hover {
     padding-bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
   }
   body.has-tabbar .siteFooterSlot {
+    display: none;
+  }
+}
+
+/* AppShell 縦レイアウト（短いページでもフッターを最下部へ） */
+.app-shell { min-height: 100vh; display: flex; flex-direction: column; }
+@supports (height: 100dvh) { .app-shell { min-height: 100dvh; } }
+.app-shell .app-content { flex: 1 0 auto; }
+
+/* ▼▼ ここを“モバイル幅のみ”に限定（重要） ▼▼ */
+@media (max-width: 768px) {
+  /* タブバーが出る画面（モバイル×ログイン）だけ下余白＋フッター非表示 */
+  body.has-tabbar .app-content {
+    padding-bottom: calc(var(--tabbar-h, 72px) + env(safe-area-inset-bottom));
+  }
+  body.has-tabbar .app-shell > footer {
     display: none;
   }
 }
