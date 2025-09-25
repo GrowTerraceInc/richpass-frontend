@@ -7,10 +7,17 @@ export const metadata: Metadata = {
   description: 'アカウント登録が完了しました。診断結果を見て学習を始めましょう。',
 };
 
-export default function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ verified?: string }>;
+}) {
+  const sp = await searchParams;
+  const verified = sp?.verified === '1';
+
   return (
     <main data-testid="verify-root">
-      <VerifyGate />
+      <VerifyGate verified={verified} />
       <RegistrationComplete />
     </main>
   );

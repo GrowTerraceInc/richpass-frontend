@@ -6,10 +6,18 @@ export const metadata: Metadata = {
   description: 'メールで届いたリンクから新しいパスワードを設定してください。',
 };
 
-export default function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ token?: string; email?: string }>;
+}) {
+  const sp = await searchParams;
+  const token = sp?.token ?? '';
+  const email = sp?.email ?? '';
+
   return (
     <div data-testid="reset-root">
-      <ResetPasswordForm />
+      <ResetPasswordForm token={token} email={email} />
     </div>
   );
 }

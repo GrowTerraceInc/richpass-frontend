@@ -6,15 +6,14 @@ export const metadata: Metadata = {
   description: 'アカウントにログインします。',
 };
 
-export default function Page({
+export default async function Page({
   searchParams,
 }: {
-  searchParams: { next?: string; success?: string };
+  searchParams: Promise<{ next?: string; success?: string }>;
 }) {
-  // /login?next=/home のような遷移先指定（未指定は /home）
-  const nextPath = searchParams?.next ? decodeURIComponent(searchParams.next) : '/home';
-  // /login?success=password-updated でバナー表示
-  const successParam = searchParams?.success;
+  const sp = await searchParams;
+  const nextPath = sp?.next ? decodeURIComponent(sp.next) : '/home';
+  const successParam = sp?.success;
 
   return <LoginContent nextPath={nextPath} successParam={successParam} />;
 }
