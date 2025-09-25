@@ -1,0 +1,22 @@
+.nav { margin: 8px 0 16px; }
+
+.link {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+
+  /* Figma調：ブランド色・下線なし・太字 */
+  color: var(--color-primary-500);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.link:hover { color: var(--color-primary-600); }
+@media (min-width: 1024px) {
+  .link { font-size: 16px; }
+}

@@ -1,0 +1,61 @@
+/* 既存は残しつつ、以下を追記 or 置換 */
+
+.center { display: flex; justify-content: center; align-items: flex-start; }
+
+/* 画面ラッパー */
+.screen { min-height: 100dvh; display: flex; flex-direction: column; background: var(--color-white); }
+
+/* 上部：戻るバー（高さ60px） */
+.backBar {
+  height: 60px;
+  display: flex;
+  align-items: center;
+}
+.backBarInner { width: 100%; max-width: var(--container-sm); margin: 0 auto; padding: 0 16px; }
+/* BackLinkのnavの余白を0に（BackLinkはclassNameを受ける） */
+.backBarNav { margin: 0; }
+
+/* 本体：パディング8px（左右はコンテナの16pxに委ねる） */
+.screenBody { padding: 8px 0; }
+.screenBodyInner { width: 100%; max-width: var(--container-sm); margin: 0 auto; padding: 0 16px; }
+
+/* 枠カードは撤廃済みのまま */
+.card { width: 100%; max-width: 560px; margin: 0 auto; padding: 0; background: transparent; border: 0; border-radius: 0; box-shadow: none; }
+
+.backRow { margin-bottom: 8px; }
+.backLink { color: var(--color-gray-600); text-decoration: underline; text-underline-offset: 3px; font-weight: 700; }
+.header { text-align: center; }
+.subTextCenter { color: var(--color-gray-600); }
+.alert { margin: 12px 0; padding: 10px 12px; border-radius: 10px; background: var(--color-primary-100); border: 1px solid var(--color-gray-200); }
+.success { margin: 12px 0; padding: 10px 12px; border-radius: 10px; background: #f0fdf4; border: 1px solid #86efac; color: #166534; }
+.form { margin-top: 12px; }
+.formRow { margin-bottom: 14px; }
+.label { display: block; font-weight: 800; color: var(--color-gray-900); margin-bottom: 6px; font-size: 14px; }
+.input {
+  width: 100%; height: 48px; border-radius: 12px; border: 1px solid var(--color-gray-200);
+  background: var(--color-white); padding: 0 14px; font-size: 16px; color: var(--color-gray-900);
+  outline: none; transition: border-color .15s ease, box-shadow .15s ease;
+}
+.input:focus{ border-color: var(--color-primary-500); box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-500) 25%, transparent); }
+.fieldError { margin-top: 6px; color: #ef4444; font-size: 13px; }
+.actions { display: flex; justify-content: center; margin-top: 16px; }
+.link { color: var(--color-primary-500); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ===== 強度メーター（signupと同仕様） ===== */
+.meter {
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--color-gray-100);
+  overflow: hidden;
+  margin-top: 6px;
+}
+.meterFill {
+  height: 100%;
+  width: 0%;
+  transition: width .25s ease;
+  background: #ef4444; /* 初期: 弱い(赤) */
+  border-radius: 9999px;
+}
+.meter--2 .meterFill { background: #f59e0b; }                 /* オレンジ */
+.meter--3 .meterFill { background: var(--color-primary-500); } /* ブランド橙 */
+.meter--4 .meterFill { background: var(--color-success); }     /* 緑 */

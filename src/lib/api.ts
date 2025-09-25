@@ -105,3 +105,55 @@ export async function logout(): Promise<true> {
   }
   return true;
 }
+
+/* ============================================================
+ *  追加：Signup/Verify/Forgot/Reset 用の薄ラッパー
+ *  - すべて credentials: 'include' / cache: 'no-store'
+ *  - CSRF + XSRF ヘッダを統一処理
+ * ============================================================ */
+
+// 共通 POST ヘルパ
+export async function apiPostJson(path: string, payload: unknown): Promise<Response> {
+  await getCsrfCookie();
+  const token = getXsrfTokenFromCookie();
+  return apiFetch(path, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+      ...(token ? { 'X-XSRF-TOKEN': token } : {}),
+    },
+    body: JSON.stringify(payload ?? {}),
+  });
+}
+
+// 1) Register
+export function registerApi(payload: {
+  name: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+  agree: boolean;
+}) {
+  return apiPostJson('/register', payload);
+}
+
+// 2) Resend verification
+export function resendVerificationApi() {
+  return apiPostJson('/email/verification-notification', {});
+}
+
+// 3) Forgot password（Fortify準拠）
+export function requestPasswordResetApi(email: string) {
+  return apiPostJson('/forgot-password', { email });
+}
+
+// 4) Reset password（Fortify準拠）
+export function resetPasswordApi(payload: {
+  token: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+}) {
+  return apiPostJson('/reset-password', payload);
+}
