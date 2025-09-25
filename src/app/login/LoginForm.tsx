@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import styles from "@/components/auth/Auth.module.css";   // 見出し/トグル等
 import form from "./LoginForm.module.css";                // 入力UI
 import Button from "@/components/ui/Button";
@@ -13,7 +13,7 @@ export interface LoginFormValues {
   remember: boolean;
 }
 export interface LoginFormProps {
-  /** 親で独自処理したい場合だけ渡す。未指定なら内部で doLogin→refresh→/home を実行 */
+  /** 親で独自処理したい場合だけ渡す。未指定なら内部で doLogin→refresh→nextPath へ遷移 */
   onSubmit?: (values: LoginFormValues) => Promise<void> | void;
   loading?: boolean;
   errorMessage?: string | null;
@@ -21,6 +21,8 @@ export interface LoginFormProps {
   defaultEmail?: string;
   variant?: "card" | "plain";
   hideTitle?: boolean;
+  /** /login?next=... に相当。親（LoginContent）から渡す */
+  nextPath?: string;
 }
 
 export default function LoginForm({
@@ -31,11 +33,9 @@ export default function LoginForm({
   defaultEmail = "",
   variant = "plain",
   hideTitle = true,
+  nextPath = "/home",
 }: LoginFormProps) {
   const router = useRouter();
-  const search = useSearchParams();
-  const next = search.get("next") || "/home";
-
   const { doLogin, refresh } = useAuth(); // doLogin(email, password)
 
   const [email, setEmail] = useState(defaultEmail);
@@ -64,11 +64,11 @@ export default function LoginForm({
       } else {
         // ← 修正ポイント：オブジェクトでなく 2 引数で渡す
         await doLogin(email, password);
+        // セッション確定（/api/me を取り直して user を更新）
+        await refresh();
+        // nextPath を尊重して遷移
+        router.replace(nextPath);
       }
-      // セッション確定（/api/me を取り直して user を更新）
-      await refresh();
-      // ?next= を尊重して遷移
-      router.replace(next);
     } catch (err: unknown) {
       const msg =
         err instanceof Error
